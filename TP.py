@@ -1,4 +1,13 @@
-#                       Lecture d’un graphe d’interactions entre protéines
+#                                           Lecture d’un graphe d’interactions entre protéines
+
+
+'''
+
+            Importation des modules nécessaires
+
+'''
+import numpy as np
+
 
 
 '''
@@ -20,19 +29,20 @@ unique argument le nom du fichier à lire. Le dictionnaire créé sera retourné
 
         
 def read_interaction_file_dict(file):
-    dic = {}
+    interactions_dic = {}
     with open(file, 'r') as file_reader :
         for line in file_reader.readlines()[1:]:
             int1, int2  = line.split()
-            if int1 not in dic:
-                dic[int1] = list(int2)
+            if int1 not in interactions_dic:
+                interactions_dic[int1] = list(int2)
             else:
-                dic[int1].append(int2)
-            if int2 not in dico:
-                dic[int2] = list(int1)
+                interactions_dic[int1].append(int2)
+            if int2 not in interactions_dic:
+                interactions_dic[int2] = list(int1)
             else:
-                dic[int2].append(int1)
-    return dic
+                interactions_dic[int2].append(int1)
+    return interactions_dic
+      
 
 '''
         1.2.2 Question structure 2
@@ -45,10 +55,9 @@ en unique argument le nom du fichier à lire. La liste créée sera retournée p
 
 #liste de listes ou liste de tuples ?
 def read_interaction_file_list(file):
-    list_int = []
     with open(file, 'r') as file_reader :
-        list_int = [tuple(line.split()) for line in file_reader.readlines()[1:]]
-    return list_int
+        interactions_list = [tuple(line.split()) for line in file_reader.readlines()[1:]]
+    return interactions_list
  
 '''
     1.2.3 Question structure 3
@@ -61,8 +70,6 @@ ainsi que la liste ordonnée des sommets (parce que, évidemment, l’ordre des 
 lire correctement la matrice d’adjacence !).
 
 '''
-
-import numpy as np
 
 def read_interaction_file_mat(file):
     dic = read_interaction_file_dict(file)
@@ -136,3 +143,67 @@ def is_interaction_file(file):
         return True
     else:
         return False
+
+#                                                                        --------------
+#                                                                       |  CHAPITRE 2  |
+#                                                                        --------------
+
+#                                           Semaine 2 : Exploration du graphe d’interactions protéine-protéine
+#                                           ---------   ------------------------------------------------------
+
+
+
+'''
+
+2.1 Exploration du graphe global
+
+    2.1.1 Question exploration 1
+    
+Écrire une fonction count_vertices(file) qui compte le nombre de sommets d’un graphe.
+
+'''
+
+def count_vertices(file) :
+    interactions_dict = read_interaction_file_dict(file)
+    number_of_vertices = len(interactions_dict.keys())
+    return number_of_vertices
+    
+'''
+    2.1.2 Question exploration 2
+
+Écrire une fonction count_edges(file) qui compte le nombre d’arêtes d’un graphe. 
+
+'''
+
+def count_edges(file):
+    interactions_dict = read_interaction_file_dict(file)
+    number_of_edges = (interactions_dict.values())
+    return number_of_edges
+
+'''
+    
+    2.1.3 Question nettoyage
+
+Écrire une fonction clean_interactome(filein, fileout) qui lit un fichier contenant un graphe d’interactions protéine-protéine et y enlève (i) toutes 
+les interactions redondantes, et (ii) tous les homo-dimères. Le graphe obtenu sera écrit dans un nouveau fichier au même format que le format de départ 
+(posez-vous la question de savoir si ça ne vaut pas le coup d’écrire une ou plusieurs fonctions d’écriture d’un graphe dans un fichier).
+
+'''
+
+
+def clean_interactome(filein, fileout):
+    with open(filein, "r") as file_reader:
+        pass
+    
+    return fileout
+    
+
+'''
+
+    2.1.4 Question test
+    
+Il est fondamental de tester le bon comportement de vos fonctions avant de poursuivre plus avant dans l’étude des réseaux d’interactions protéine-protéine. 
+Vos fonctions ne sont pas utilisables si nous n’avons pas moyen de nous assurer qu’elles font effectivement ce pour quoi elles ont été concues. Préparez 
+toute une série de tests pour vérifier que vos fonctions ont le comportement que nous attendons d’elles.
+
+'''
