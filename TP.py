@@ -20,23 +20,19 @@ unique argument le nom du fichier à lire. Le dictionnaire créé sera retourné
 
         
 def read_interaction_file_dict(file):
-    dico = {}
-    with open(file, 'r') as graphe :
-        for line in graphe.readlines()[1:]:
+    dic = {}
+    with open(file, 'r') as file_reader :
+        for line in file_reader.readlines()[1:]:
             int1, int2  = line.split()
-            if int1 not in dico:
-                dico[int1] = list(int2)
+            if int1 not in dic:
+                dic[int1] = list(int2)
             else:
-                dico[int1].append(int2)
+                dic[int1].append(int2)
             if int2 not in dico:
-                dico[int2] = list(int1)
+                dic[int2] = list(int1)
             else:
-                dico[int2].append(int1)
-    return dico
-
-# test
-file_test = "/Users/Enora/Desktop/COURS/M2/S1/BS2/TP/toy_example.txt"
-#print(read_interaction_file_dict(file_test))
+                dic[int2].append(int1)
+    return dic
 
 '''
         1.2.2 Question structure 2
@@ -49,13 +45,11 @@ en unique argument le nom du fichier à lire. La liste créée sera retournée p
 
 #liste de listes ou liste de tuples ?
 def read_interaction_file_list(file):
-    liste = []
-    with open(file, 'r') as graphe :
-        liste = [tuple(line.split()) for line in graphe.readlines()[1:]]
-    return liste
+    list_int = []
+    with open(file, 'r') as file_reader :
+        list_int = [tuple(line.split()) for line in file_reader.readlines()[1:]]
+    return list_int
  
-# test       
-
 '''
     1.2.3 Question structure 3
 
@@ -67,20 +61,17 @@ ainsi que la liste ordonnée des sommets (parce que, évidemment, l’ordre des 
 lire correctement la matrice d’adjacence !).
 
 '''
-from array import array
+
 import numpy as np
 
 def read_interaction_file_mat(file):
-    dico = read_interaction_file_dict(file)
-    global sommets #matrice
-    sommets = list(dico.keys())
-    matrice = np.zeros((len(sommets), len(sommets)), dtype=int)
-    for i in dico:
-        for j in dico[i]:
-            matrice[sommets.index(i), sommets.index(j)] = 1
-    return sommets, matrice
-
-#test
+    dic = read_interaction_file_dict(file)
+    peaks = list(dic.keys())
+    matrix = np.zeros((len(peaks), len(peaks)), dtype=int)
+    for i in dic:
+        for j in dic[i]:
+            matrix[peaks.index(i), peaks.index(j)] = 1
+    return peaks, matrix
 
 
 '''
@@ -136,3 +127,12 @@ Par exemple :
     4. fichier contenant une ligne qui ne comporte pas le bon nombre de colonnes...
     
 '''
+
+def is_interaction_file(file):
+    with open(file, "r") as file_reader:
+        text = [line.split() for line in file_reader.readlines()]
+    count = sum([len(elem) for elem in text[1:]])
+    if text != [] and text[0][0].isnumeric() == True and len(text[1:]) == int(text[0][0]) and count%2 ==0:
+        return True
+    else:
+        return False
