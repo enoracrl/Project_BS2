@@ -192,11 +192,17 @@ les interactions redondantes, et (ii) tous les homo-dimères. Le graphe obtenu s
 
 
 def clean_interactome(filein, fileout):
-    with open(filein, "r") as file_reader:
-        pass
+    with open(filein, "r") as file_reader : #, open(fileout, "w+") as file_writer :
+        text = [line.split() for line in file_reader.readlines()]
+    for i in range(1,len(text)-1) :
+        if text[i][0] ==  text[i][1] :
+           del text[i]
+    text[0] = str(len(text[1:]))
+    print(text)
+    #np.savetxt(fileout, fileout, delimiter =" ",fmt ='% s')
     
-    return fileout
-    
+
+clean_interactome("/Users/Enora/enoracrl/Project_BS2/toy_example_to_clean.txt", "/Users/Enora/enoracrl/Project_BS2/toy_example_cleaned-out.txt")
 
 '''
 
