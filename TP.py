@@ -29,6 +29,7 @@ unique argument le nom du fichier à lire. Le dictionnaire créé sera retourné
 
         
 def read_interaction_file_dict(file):
+    """Return a dictionary that contains all neighboring vertices of a vertex."""
     interactions_dic = {}
     with open(file, 'r') as file_reader :
         for line in file_reader.readlines()[1:]:
@@ -55,6 +56,7 @@ en unique argument le nom du fichier à lire. La liste créée sera retournée p
 
 #liste de listes ou liste de tuples ?
 def read_interaction_file_list(file):
+    """Return a list that contains a tuple of neighboring vertices without duplicates."""
     with open(file, 'r') as file_reader :
         interactions_list = [tuple(line.split()) for line in file_reader.readlines()[1:]]
     return interactions_list
@@ -72,6 +74,8 @@ lire correctement la matrice d’adjacence !).
 '''
 
 def read_interaction_file_mat(file):
+    """Return an adjacency matrix that show 1 every time there is an interaction between two vertices. 
+    ALso return a list that contains all vertices in the order of the matrix."""
     dic = read_interaction_file_dict(file)
     peaks = list(dic.keys())
     matrix = np.zeros((len(peaks), len(peaks)), dtype=int)
@@ -91,6 +95,8 @@ premier élément est le dictionnaire représentant le graphe, le second éléme
 '''
 
 def read_interaction_file(file):
+    """Return a triplet, the first element is the interaction dictionnary, the second one is the interaction list 
+    and the last one is the ordered list of vertices."""
     d_int = read_interaction_file_dict(file)
     l_int = read_interaction_file_list(file)
     m_int, l_som = read_interaction_file_mat(file)
@@ -136,6 +142,7 @@ Par exemple :
 '''
 
 def is_interaction_file(file):
+    """Return a boolean that return True if all conditions are True and return False if one of them is False."""
     with open(file, "r") as file_reader:
         text = [line.split() for line in file_reader.readlines()]
     count = sum([len(elem) for elem in text[1:]])
@@ -164,6 +171,7 @@ def is_interaction_file(file):
 '''
 
 def count_vertices(file) :
+    """Return the number of vertices."""
     interactions_dict = read_interaction_file_dict(file)
     number_of_vertices = len(interactions_dict.keys())
     return number_of_vertices
@@ -176,8 +184,9 @@ def count_vertices(file) :
 '''
 
 def count_edges(file):
-    interactions_dict = read_interaction_file_dict(file)
-    number_of_edges = (interactions_dict.values())
+    """Return the number of edges."""
+    with open(file, "r") as file_reader :
+        number_of_edges = file_reader.readline()[0:]
     return number_of_edges
 
 '''
@@ -192,6 +201,7 @@ les interactions redondantes, et (ii) tous les homo-dimères. Le graphe obtenu s
 
 
 def clean_interactome(filein, fileout):
+    """Return an output file that is the same file as the input file but without any duplicate interactions or homo-dimers."""
     with open(filein, "r") as file_reader : #, open(fileout, "w+") as file_writer :
         text = [line.split() for line in file_reader.readlines()]
     for i in range(1,len(text)-1) :
