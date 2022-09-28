@@ -34,12 +34,12 @@ def read_interaction_file_dict(file):
     with open(file, 'r') as file_reader :
         for line in file_reader.readlines()[1:]:
             int1, int2  = line.split()
-            if int1 not in interactions_dic:
-                interactions_dic[int1] = list(int2)
+            if int1 not in interactions_dic.keys():
+                interactions_dic[int1] = [int2]
             else:
                 interactions_dic[int1].append(int2)
-            if int2 not in interactions_dic:
-                interactions_dic[int2] = list(int1)
+            if int2 not in interactions_dic.keys():
+                interactions_dic[int2] = [int1]
             else:
                 interactions_dic[int2].append(int1)
     return interactions_dic
