@@ -1,5 +1,8 @@
 #                                           Lecture d’un graphe d’interactions entre protéines
 
+#                                                       Léa BEAULIEU - Enora CORLER
+#                                                             M2 Parcours BIS
+
 
 '''
 
@@ -41,7 +44,6 @@ def read_interaction_file_dict(file):
                 interactions_dic[int2].append(int1)
     return interactions_dic
       
-
 '''
         1.2.2 Question structure 2
         
