@@ -17,8 +17,13 @@ from TP import *
 '''
 Testing files
 '''
-file_test_1 = "/Users/Enora/enoracrl/Project_BS2/toy_example.txt"
-file_test_2 = "/Users/Enora/enoracrl/Project_BS2/Human_HighQuality.txt"
+file_test_1 = "/Users/Enora/enoracrl/Project_BS2/toy_example.txt"           # simple file with only 6 interactions between letters
+file_test_2 = "/Users/Enora/enoracrl/Project_BS2/Human_HighQuality.txt"     # complex file with 27276 interactions
+
+false_file_1 = "/Users/Enora/enoracrl/Project_BS2/false_file_example-1.txt"     # a file without the number of interactions on the first line
+false_file_2 = "/Users/Enora/enoracrl/Project_BS2/false_file_example-2.txt"     # a empty file
+false_file_3 = "/Users/Enora/enoracrl/Project_BS2/false_file_example-3.txt"     # a file with a number of lines =/= number of interactions 
+false_file_4 = "/Users/Enora/enoracrl/Project_BS2/false_file_example-4.txt"     # a file with a wrong number of columns
 
 
 '''
@@ -141,8 +146,23 @@ class Test_Results(unittest.TestCase):
     
     def test_is_interaction_file(self):
         assert is_interaction_file(file_test_1) == True
-
-                                                           
+        assert is_interaction_file(file_test_2) == True
+        assert is_interaction_file(false_file_1) == False
+        assert is_interaction_file(false_file_2) == False
+        assert is_interaction_file(false_file_3) == False
+        assert is_interaction_file(false_file_4) == False
+        
+    def test_count_vertices(self) :
+        assert count_vertices(file_test_1) == 6
+        assert count_vertices(file_test_2) == 9596
+        
+    def test_count_edges(self) :
+        assert count_edges(file_test_1) == 6
+        assert count_edges(file_test_2) == 27276
+                                                   
+    def test_clean_interactome(self):
+        pass
+        
                                                            
 
 if __name__ == '__main__':
