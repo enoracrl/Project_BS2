@@ -43,7 +43,7 @@ def read_interaction_file_dict(file):
             else:
                 interactions_dic[int2].append(int1)
     return interactions_dic
-      
+   
 '''
         1.2.2 Question structure 2
         
@@ -76,7 +76,6 @@ def read_interaction_file_mat(file):
             matrix[peaks.index(i), peaks.index(j)] = 1
     return peaks, matrix
 
-
 '''
     1.2.4 Question structure 4
     
@@ -92,6 +91,8 @@ def read_interaction_file(file):
     m_int, l_som = read_interaction_file_mat(file)
     return d_int, l_int, m_int, l_som
 
+
+print(read_interaction_file("/Users/Enora/enoracrl/Project_BS2/toy_example.txt"))
 
 '''
     1.2.5 Question structure 5
@@ -181,8 +182,8 @@ def clean_interactome(filein, fileout):
     for i in range(1,len(text)-1) :
         if text[i][0] ==  text[i][1] :
            del text[i]
-    text = list(l for l, _ in itertools.groupby(text)) # we remove duplicates from our list of lists 
-    text[0] = str(len(text[1:])) # we modify the initial number of interactions by the newest value
+    text = list(l for l, _ in itertools.groupby(text))          # we remove duplicates from our list of lists 
+    text[0] = str(len(text[1:]))                                # we modify the initial number of interactions by the newest value
     with open(fileout, "w+") as file_writer :
         file_writer.write(text[0]+"\n")
         for i in text[1:]:
