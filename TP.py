@@ -6,12 +6,12 @@
 
 '''
 
-            Importation des modules nécessaires
+Importation of necessary modules
 
 '''
 
 
-import numpy as np      # creation de matrices / tableaux
+import numpy as np      # creation of matrix / tables
 import itertools        # creating and using iterators
 
 
@@ -26,9 +26,17 @@ import itertools        # creating and using iterators
 '''
 
         
-def read_interaction_file_dict(file):
+def read_interaction_file_dict(file) -> dict:
     '''
+    
     Return a dictionary that contains all neighboring vertices of a vertex.
+    
+    Args :
+        file : a tabulate file, .txt format
+        
+    Output :
+        interactions_dic : dict()
+    
     '''
     interactions_dic = {}
     with open(file, 'r') as file_reader :
@@ -49,10 +57,17 @@ def read_interaction_file_dict(file):
         
 '''
 
-#liste de listes ou liste de tuples ?
-def read_interaction_file_list(file):
+def read_interaction_file_list(file) -> list:
     '''
+    
     Return a list that contains a tuple of neighboring vertices without duplicates.
+    
+    Args :
+        file : a tabulate file, .txt format
+        
+    Output :
+        interactions_list : list()
+        
     '''
     with open(file, 'r') as file_reader :
         interactions_list = [tuple(line.split()) for line in file_reader.readlines()[1:]]
@@ -63,10 +78,18 @@ def read_interaction_file_list(file):
 
 '''
 
-def read_interaction_file_mat(file):
+def read_interaction_file_mat(file) :
     '''
-    Return an adjacency matrix that show 1 every time there is an interaction between two vertices. 
-    Also return a list that contains all vertices in the order of the matrix.
+    
+    Return an adjacency matrix that show 1 every time there is an interaction between two vertices. Also return a list that contains all vertices 
+    in the order of the matrix.
+    
+    Args :
+        file : a tabulate file, .txt format
+        
+    Output :
+        peaks, matrix : list() and a matrix (np.ndarrays())
+    
     '''
     dic = read_interaction_file_dict(file)
     peaks = list(dic.keys())
@@ -83,8 +106,16 @@ def read_interaction_file_mat(file):
 
 def read_interaction_file(file):
     '''
+    
     Return a triplet, the first element is the interaction dictionnary, the second one is the interaction list 
     and the last one is the ordered list of vertices.
+    
+    Args :
+        file : a tabulate file, .txt format
+        
+    Output :
+        d_int, l_int, m_int, l_som : dict(), list(), list() and a matrix (np.ndarrays())
+    
     '''
     d_int = read_interaction_file_dict(file)
     l_int = read_interaction_file_list(file)
@@ -115,7 +146,17 @@ def read_interaction_file(file):
 
 def is_interaction_file(file):
     '''
-    Return a boolean that return True if all conditions are True and return False if one of them is False.
+    
+    Return a boolean that return True if all conditions (correct file format) are True and return False (wrong file format) if one of them is False 
+    for a specific file given in input.
+    
+    Args :
+        file : a tabulate file, .txt format
+        
+    Output :
+        True : if the file is the file is not empty, with a correct number of interactions/lines/columns
+        False : if at least one of the condition above is not respected
+    
     '''
     with open(file, "r") as file_reader:
         text = [line.split() for line in file_reader.readlines()]
@@ -142,9 +183,17 @@ def is_interaction_file(file):
     
 '''
 
-def count_vertices(file) :
+def count_vertices(file) -> int:
     '''
+    
     Return the number of vertices by counting the numbers of keys of the interaction dictionnary (= the number of vertices)
+    
+    Args :
+        file : a tabulate file, .txt format
+        
+    Output :
+        number_of_vertices : an int (number of vertices)
+    
     '''
     interactions_dict = read_interaction_file_dict(file)
     number_of_vertices = len(interactions_dict.keys())
@@ -155,16 +204,21 @@ def count_vertices(file) :
 
 '''
 
-def count_edges(file):
+def count_edges(file) -> int:
     ''' 
+    
     Return the number of edges. 
+    
+    Args :
+        file : a tabulate file, .txt format
+        
+    Output :
+        number_of_edges : an int (number of edges)
+    
     '''
     with open(file, "r") as file_reader :
         number_of_edges = int(file_reader.readline()[0:])
     return number_of_edges
-
-
-print(count_edges("/Users/Enora/enoracrl/Project_BS2/Human_HighQuality.txt"))
 
 '''
     
@@ -175,7 +229,16 @@ print(count_edges("/Users/Enora/enoracrl/Project_BS2/Human_HighQuality.txt"))
 
 def clean_interactome(filein, fileout):
     ''' 
+    
     Return an output file that is the same file as the input file but without any duplicate interactions or homo-dimers.
+    
+    Args :
+        filein : a tabulate file to be cleaned, .txt format
+        fileout : a non-existing file, .txt format
+        
+    Output :
+        fileout : a tabulate file based on the filein file, cleaned from all repetitions/homo-dimers
+    
     '''
     text = read_interaction_file_list(filein)
     for i in range(1,len(text)-1) :
