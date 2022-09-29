@@ -92,8 +92,6 @@ def read_interaction_file(file):
     return d_int, l_int, m_int, l_som
 
 
-print(read_interaction_file("/Users/Enora/enoracrl/Project_BS2/toy_example.txt"))
-
 '''
     1.2.5 Question structure 5
 
@@ -152,7 +150,6 @@ def count_vertices(file) :
     number_of_vertices = len(interactions_dict.keys())
     return number_of_vertices
     
-    
 '''
     2.1.2 Question exploration 2
 
@@ -166,6 +163,8 @@ def count_edges(file):
         number_of_edges = int(file_reader.readline()[0:])
     return number_of_edges
 
+
+print(count_edges("/Users/Enora/enoracrl/Project_BS2/Human_HighQuality.txt"))
 
 '''
     
