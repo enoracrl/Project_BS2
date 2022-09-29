@@ -147,6 +147,7 @@ def clean_interactome(filein, fileout):
         fileout : a tabulate file based on the filein file, cleaned from
         all repetitions/homo-dimers
     '''
+    
     text = read_interaction_file_list(filein)
     for i in range(1, len(text)-1):
         if text[i][0] == text[i][1]:
