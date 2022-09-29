@@ -3,7 +3,7 @@
 
 
 '''
-Importation des modules necessaires
+Importation of necessary modules
 '''
 
 from termios import CEOF
