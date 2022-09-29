@@ -1,8 +1,8 @@
 # PROJECT BS2
 
-# Study of graphs of interactions
+## Study of graphs of interactions
 
-UE BS2
+**UE BS2**
 
 *Enora CORLER and Léa BEAULIEU - M2 BIS*
 
