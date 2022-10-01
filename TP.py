@@ -23,14 +23,14 @@ def read_interaction_file_dict(file) -> dict:
         interactions_dic : dict()
     '''
     interactions_dic = {}
-    with open(file, 'r') as file_reader:
+    with open(file, 'r', encoding="utf-8") as file_reader:
         for line in file_reader.readlines()[1:]:
             int1, int2 = line.split()
-            if int1 not in interactions_dic.keys():
+            if int1 not in interactions_dic:
                 interactions_dic[int1] = [int2]
             else:
                 interactions_dic[int1].append(int2)
-            if int2 not in interactions_dic.keys():
+            if int2 not in interactions_dic:
                 interactions_dic[int2] = [int1]
             else:
                 interactions_dic[int2].append(int1)
@@ -44,7 +44,7 @@ def read_interaction_file_list(file) -> list:
     Output :
         interactions_list : list()
     '''
-    with open(file, 'r') as file_reader:
+    with open(file, 'r', encoding="utf-8") as file_reader:
         interactions_list = [tuple(line.split())
                              for line in file_reader.readlines()[1:]]
     return interactions_list
@@ -59,12 +59,12 @@ def read_interaction_file_mat(file):
     Output :
         peaks, matrix : list() and a matrix (np.ndarrays())
     '''
-    dic = read_interaction_file_dict(file)
-    peaks = list(dic.keys())
+    interactions_dic = read_interaction_file_dict(file)
+    peaks = list(interactions_dic.keys())
     matrix = np.zeros((len(peaks), len(peaks)), dtype=int)
-    for i in dic:
-        for j in dic[i]:
-            matrix[peaks.index(i), peaks.index(j)] = 1
+    for key, values in interactions_dic.items():
+        for value in values:
+            matrix[peaks.index(key), peaks.index(value)] = 1
     return peaks, matrix
 
 def read_interaction_file(file):
@@ -81,13 +81,13 @@ def read_interaction_file(file):
     m_int, l_som = read_interaction_file_mat(file)
     return d_int, l_int, m_int, l_som
 
-'''
-1.2.5 Question structure 5
-In order not to degrade the performance of the read_interaction_file() function too much,
-it would be necessary to ask what the user wants to have in output by passing it as an argument
-to the read_interaction_file() function, and this would make it possible not to generate all the
-data without utility.
-'''
+
+# 1.2.5 Question structure 5
+# In order not to degrade the performance of the read_interaction_file() function too much,
+# it would be necessary to ask what the user wants to have in output by passing it as an argument
+# to the read_interaction_file() function, and this would make it possible not to generate all the
+# data without utility.
+
 
 def is_interaction_file(file):
     '''
@@ -100,7 +100,7 @@ def is_interaction_file(file):
         interactions/lines/columns
         False : if at least one of the condition above is not respected
     '''
-    with open(file, "r") as file_reader:
+    with open(file, "r", encoding="utf-8") as file_reader:
         text = [line.split() for line in file_reader.readlines()]
     count = sum([len(elem) for elem in text[1:]])
     if text != [] and text[0][0].isnumeric() is True :
@@ -131,7 +131,7 @@ def count_edges(file) -> int:
     Output :
         number_of_edges : an int (number of edges)
     '''
-    with open(file, "r") as file_reader:
+    with open(file, "r", encoding="utf-8") as file_reader:
         number_of_edges = int(file_reader.readline()[0:])
     return number_of_edges
 
@@ -155,22 +155,28 @@ def clean_interactome(filein, fileout):
     text = list(l for l, _ in itertools.groupby(text))
     # we modify the initial number of interactions by the newest value
     text[0] = str(len(text[1:]))
-    with open(fileout, "w+") as file_writer:
+    with open(fileout, "w+", encoding="utf-8") as file_writer:
         file_writer.write(text[0]+"\n")
         for i in text[1:]:
             file_writer.write(str(i[0]) + str(" ") + str(i[1])+"\n")
-            
+
 def get_degree(file, prot:str) -> int:
-    dict = read_interaction_file_dict(file)
-    if prot not in dict.keys():
+    '''
+    test
+    '''
+    interactions_dic = read_interaction_file_dict(file)
+    if prot not in interactions_dic:
         raise ValueError("This protein is not in this graph")
-    protein_degree = len(dict[prot])
+    protein_degree = len(interactions_dic[prot])
     return protein_degree
 
 def get_max_degree(file) -> tuple:
+    '''
+    test
+    '''
     interactome_dict = read_interaction_file_dict(file)
     max_degree = max(len(item) for item in interactome_dict.values())
-    proteins = tuple(item for item in interactome_dict.keys() if len(interactome_dict[item]) == max_degree)
+    proteins = tuple(key for key, values in interactome_dict.items() if len(values) == max_degree)
     return proteins, max_degree
 
 def get_ave_degree(file) -> float:
@@ -179,14 +185,25 @@ def get_ave_degree(file) -> float:
     --> à voir pour améliorer
     '''
     sum_degree = 0
-    interaction_dict = read_interaction_file_dict(file)
-    for prot in interaction_dict.keys() : 
-        sum_degree += get_degree(file, prot) 
-    count_prot = len(interaction_dict.keys())
+    interactions_dic = read_interaction_file_dict(file)
+    for prot in interactions_dic :
+        sum_degree += get_degree(file, prot)
+    count_prot = len(interactions_dic)
     mean_degree = sum_degree/count_prot
     return mean_degree
 
+def count_degree(file, deg):
+    '''
+    test
+    '''
+    same_degree_prot = 0
+    interactions_dic = read_interaction_file_dict(file)
+    for prot, _ in interactions_dic.items():
+        if get_degree(file, prot) == deg:
+            same_degree_prot += 1
+    return same_degree_prot
 
-#print(get_ave_degree("/Users/Enora/enoracrl/Project_BS2/Human_HighQuality.txt"))
 
-#print(get_ave_degree("/Users/Enora/enoracrl/Project_BS2/toy_example.txt"))
+#print(count_degree("/Users/Enora/enoracrl/Project_BS2/toy_example.txt", 3))
+
+#print(count_degree("/Users/Enora/enoracrl/Project_BS2/Human_HighQuality.txt", 1))
