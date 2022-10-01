@@ -147,7 +147,6 @@ def clean_interactome(filein, fileout):
         fileout : a tabulate file based on the filein file, cleaned from
         all repetitions/homo-dimers
     '''
-    
     text = read_interaction_file_list(filein)
     for i in range(1, len(text)-1):
         if text[i][0] == text[i][1]:
@@ -160,3 +159,19 @@ def clean_interactome(filein, fileout):
         file_writer.write(text[0]+"\n")
         for i in text[1:]:
             file_writer.write(str(i[0]) + str(" ") + str(i[1])+"\n")
+            
+def get_degree(file, prot:str) -> int:
+    dict = read_interaction_file_dict(file)
+    if prot not in dict.keys():
+        raise ValueError("This protein is not in this graph")
+    protein_degree = len(dict[prot])
+    return protein_degree
+
+def get_max_degree(file) -> tuple:
+    interactome_dict = read_interaction_file_dict(file)
+    max_degree = max(len(item) for item in interactome_dict.values())
+    proteins = tuple(item for item in interactome_dict.keys() if len(interactome_dict[item]) == max_degree)
+    return proteins, max_degree
+
+
+
