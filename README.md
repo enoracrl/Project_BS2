@@ -1,3 +1,6 @@
+<img src="https://upload.wikimedia.org/wikipedia/fr/thumb/6/6c/Logo_Universit%C3%A9_Rennes_1_.svg/1280px-Logo_Universit%C3%A9_Rennes_1_.svg.png" height="100px"/>
+
+
 # PROJECT BS2
 
 ## Study of graphs of interactions
@@ -20,3 +23,7 @@ Additional files :
 * **false_file_example-1.txt** to **false_file_example-4.txt** : files based on the *toy_example.txt* file which are not correctly written (empty file, wrong numbers of line/interactions/columns)
 * **toy_example_to_clean.txt** : example file with homo-dimers and repetitions which is used in input to generate a cleaned file in output
 * **interaction_graph.png** : schematic figure based on the interactions of the *toy_example.txt* file
+
+## Credits 
+
+Thanks to *Emmanuelle Becker* for the lessons over proteins interactions.
