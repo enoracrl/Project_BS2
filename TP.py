@@ -173,5 +173,20 @@ def get_max_degree(file) -> tuple:
     proteins = tuple(item for item in interactome_dict.keys() if len(interactome_dict[item]) == max_degree)
     return proteins, max_degree
 
+def get_ave_degree(file) -> float:
+    '''
+    Pas opti !!! met bcp trop de temps à tourner, mais marche
+    --> à voir pour améliorer
+    '''
+    sum_degree = 0
+    interaction_dict = read_interaction_file_dict(file)
+    for prot in interaction_dict.keys() : 
+        sum_degree += get_degree(file, prot) 
+    count_prot = len(interaction_dict.keys())
+    mean_degree = sum_degree/count_prot
+    return mean_degree
 
 
+#print(get_ave_degree("/Users/Enora/enoracrl/Project_BS2/Human_HighQuality.txt"))
+
+#print(get_ave_degree("/Users/Enora/enoracrl/Project_BS2/toy_example.txt"))
