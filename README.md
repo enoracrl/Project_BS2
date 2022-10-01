@@ -26,4 +26,5 @@ Additional files :
 
 ## Credits 
 
-Thanks to *Emmanuelle Becker* for the lessons over proteins interactions.
+** *Protein-protein interaction networks and graph theory* - **E. BECKER** (Bioinformatic master's degree courses)
+** *Python 3.10.7 documentation* - https://docs.python.org/3/
