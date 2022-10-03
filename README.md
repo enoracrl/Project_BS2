@@ -13,7 +13,7 @@
 This project is dedicated to the study of graphs of interactions between proteins, by writting tools to manipulate these graphs, and to introduce into these graphs a notion of interaction between protein domains.
 
 Scripts :
-* **TP.py** : python file containing the main functions
+* **tp.py** : python file containing the main functions
 * **test.py** : python file containing tests for our functions
 
 Additional files : 
