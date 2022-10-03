@@ -162,7 +162,7 @@ def clean_interactome(filein, fileout):
 
 def get_degree(file, prot:str) -> int:
     '''
-    test
+    ok
     '''
     interactions_dic = read_interaction_file_dict(file)
     if prot not in interactions_dic:
@@ -172,7 +172,7 @@ def get_degree(file, prot:str) -> int:
 
 def get_max_degree(file) -> tuple:
     '''
-    test
+    ok
     '''
     interactome_dict = read_interaction_file_dict(file)
     max_degree = max(len(item) for item in interactome_dict.values())
@@ -181,29 +181,37 @@ def get_max_degree(file) -> tuple:
 
 def get_ave_degree(file) -> float:
     '''
-    Pas opti !!! met bcp trop de temps à tourner, mais marche
-    --> à voir pour améliorer
+    ok
     '''
     sum_degree = 0
     interactions_dic = read_interaction_file_dict(file)
     for prot in interactions_dic :
-        sum_degree += get_degree(file, prot)
+        sum_degree += len(interactions_dic[prot])
     count_prot = len(interactions_dic)
-    mean_degree = sum_degree/count_prot
+    mean_degree = round(sum_degree/count_prot, 4)
     return mean_degree
 
 def count_degree(file, deg):
     '''
-    test
+    ok
     '''
     same_degree_prot = 0
     interactions_dic = read_interaction_file_dict(file)
-    for prot, _ in interactions_dic.items():
-        if get_degree(file, prot) == deg:
+    for prot in interactions_dic:
+        if len(interactions_dic[prot]) == deg:
             same_degree_prot += 1
     return same_degree_prot
 
+def histogram_degree(file, dmin, dmax):
+    '''
+    ko
+    compris c'est à dire inclus ? 
+    [dmin, dmax] ou ]dmin, dmax[ ???
+    pcq range c'est ]dmin, dmax]
+    '''
+    count_prot = 0
+    for deg in range(dmin+1, dmax):
+        count_prot += count_degree(file, deg)
+    return count_prot
 
-#print(count_degree("/Users/Enora/enoracrl/Project_BS2/toy_example.txt", 3))
 
-#print(count_degree("/Users/Enora/enoracrl/Project_BS2/Human_HighQuality.txt", 1))
