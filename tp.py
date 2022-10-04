@@ -205,13 +205,16 @@ def count_degree(file, deg):
 def histogram_degree(file, dmin, dmax):
     '''
     ko
-    compris c'est à dire inclus ? 
+    compris c'est à dire inclus ?
     [dmin, dmax] ou ]dmin, dmax[ ???
     pcq range c'est ]dmin, dmax]
     '''
     count_prot = 0
-    for deg in range(dmin+1, dmax):
-        count_prot += count_degree(file, deg)
-    return count_prot
-
-
+    deg_int = {}
+    for deg in range(dmin, dmax+1):
+        if deg not in deg_int.keys():
+            deg_int[deg] = count_degree(file, deg)
+        else:
+            count_prot += count_degree(file, deg)
+    for nb_deg, nb_prot in deg_int.items():
+        print(str(nb_deg), nb_prot*"*", sep=" ")
