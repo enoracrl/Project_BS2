@@ -191,6 +191,42 @@ class Test_Results(unittest.TestCase):
 
     def test_clean_interactome(self):
         pass
+    
+    def test_get_degree(self):
+        assert get_degree(file_test_1, "A") == 2
+        print(f"test_get_degree file_1\033[92m passed \033[0m")
+        assert get_degree(file_test_2, "1433B_HUMAN") == 49
+        print(f"test_get_degree file_2\033[92m passed \033[0m")
+        self.assertRaises(ValueError, get_degree, file_test_1, "G")
+        print(f"test_get_degree file_1\033[92m passed \033[0m")
+
+    def test_get_max_degree(self):
+        assert get_max_degree(file_test_1) == (('B', 'D'), 3)
+        print(f"test_get_max_degree file_1\033[92m passed \033[0m")
+        assert get_max_degree(file_test_2) == (('ATX1_HUMAN',), 207)
+        print(f"test_get_max_degree file_2\033[92m passed \033[0m")
+    
+    def test_get_ave_degree(self):
+        assert get_ave_degree(file_test_1) == 2.0
+        print(f"test_get_ave_degree file_1\033[92m passed \033[0m")
+        assert get_ave_degree(file_test_2) == 5.6849
+        print(f"test_get_ave_degree file_2\033[92m passed \033[0m")
+    
+    def test_count_degree(self):
+        assert count_degree(file_test_1, 2) == 2
+        print(f"test_count_degree file_1\033[92m passed \033[0m")
+        assert count_degree(file_test_2, 2) == 1633
+        print(f"test_count_degree file_2\033[92m passed \033[0m")
+
+'''
+    def test_histogram_degree_is_a_str(self):
+        histogram_str_1 = histogram_degree(file_test_1, 1, 2)
+        self.assertEqual(type(histogram_str_1), str)
+        print(f"test_histogram_degree_is_a_str file_1\033[92m passed \033[0m")
+        histogram_str_2 = histogram_degree(file_test_2, 1, 2)
+        self.assertEqual(type(histogram_str_2), str)
+        print(f"test_histogram_degree_is_a_str file_2\033[92m passed \033[0m")
+'''
 
     
 if __name__ == '__main__':
