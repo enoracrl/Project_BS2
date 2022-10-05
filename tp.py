@@ -177,8 +177,8 @@ def get_max_degree(file) -> tuple:
     '''
     interactome_dict = read_interaction_file_dict(file)
     max_degree = max(len(item) for item in interactome_dict.values())
-    proteins = tuple(key for key, values in interactome_dict.items() if len(values) == max_degree)
-    return proteins, max_degree
+    protein  = tuple(key for key, values in interactome_dict.items() if len(values) == max_degree)
+    return protein, max_degree
 
 def get_ave_degree(file) -> float:
     '''
@@ -197,6 +197,8 @@ def count_degree(file, deg):
     ok
     '''
     same_degree_prot = 0
+    if deg < 0 :
+        raise ValueError("You must choose a positive degree")
     interactions_dic = read_interaction_file_dict(file)
     for prot in interactions_dic:
         if len(interactions_dic[prot]) == deg:
