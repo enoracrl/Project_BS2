@@ -1,12 +1,4 @@
-'''Docstring d'une ligne décrivant brièvement ce que fait le programme. 2
-
-Usage:
-
-======
-python nom_de_ce_super_script.py argument1 argument2
-
-argument1: un entier signifiant un truc
-argument2: une chaîne de caractères décrivant un bidule
+'''Reading and exploring of a protein-protein interaction graph
 '''
 
 __authors__ = ("Enora CORLER", "Léa BEAULIEU")
