@@ -1,4 +1,9 @@
-#                                                       FICHIER DE TESTS SUR LE FICHIER TP.PY
+'''Testing functions for the tp.py file
+'''
+
+__authors__ = ("Enora CORLER", "Léa BEAULIEU")
+__contact__ = ("enora.corler@etudiant.univ-rennes1.fr", "lea.beaulieu@etudiant.univ-rennes1.fr")
+__date__ = "05/10/2022"
 
 
 '''
