@@ -12,23 +12,20 @@ Importation of necessary modules
 
 import numpy as np
 import unittest
-from TP import *
+from tp import *
 
 
 '''
 Testing files
 '''
-file_test_1 = "/Users/Enora/enoracrl/Project_BS2/toy_example.txt"           # simple file with only 6 interactions between letters
-# complex file with 27276 interactions
-file_test_2 = "/Users/Enora/enoracrl/Project_BS2/Human_HighQuality.txt"
+file_test_1 = "toy_example.txt"         # simple file with only 6 interactions between letters
+file_test_2 = "Human_HighQuality.txt"   # complex file with 27276 interactions
 
-# a file without the number of interactions on the first line
-false_file_1 = "/Users/Enora/enoracrl/Project_BS2/false_file_example-1.txt"
-false_file_2 = "/Users/Enora/enoracrl/Project_BS2/false_file_example-2.txt"     # a empty file
-# a file with a number of lines =/= number of interactions
-false_file_3 = "/Users/Enora/enoracrl/Project_BS2/false_file_example-3.txt"
-# a file with a wrong number of columns
-false_file_4 = "/Users/Enora/enoracrl/Project_BS2/false_file_example-4.txt"
+false_file_1 = "false_file_example-1.txt"     # a file without the number of interactions on the first line
+false_file_2 = "false_file_example-2.txt"     # an empty file
+false_file_3 = "false_file_example-3.txt"     # a file with a number of lines =/= number of interactions
+false_file_4 = "false_file_example-4.txt"     # a file with a wrong number of columns
+
 
 '''
 Tests that check if functions return correct types of variables 
@@ -226,6 +223,8 @@ class Test_Results(unittest.TestCase):
         print(f"test_count_degree file_1\033[92m passed \033[0m")
         assert count_degree(file_test_2, 2) == 1633
         print(f"test_count_degree file_2\033[92m passed \033[0m")
+        self.assertRaises(ValueError, count_degree, file_test_1, -10)
+        print(f"test_count_degree file_1\033[92m passed \033[0m")
 
 def test_histogram_degree(self):
         assert histogram_degree(file_test_1, 1, 2) == "1 **\n2 **\n"
@@ -233,7 +232,5 @@ def test_histogram_degree(self):
         assert histogram_degree(file_test_2, 9, 9) == "9 *********************************************************************************************************************************************************************************************************************\n"
         print(f"test_histogram_degree file_2\033[92m passed \033[0m")
 
-
-    
 if __name__ == '__main__':
     unittest.main()
