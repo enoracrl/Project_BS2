@@ -218,15 +218,12 @@ class Test_Results(unittest.TestCase):
         assert count_degree(file_test_2, 2) == 1633
         print(f"test_count_degree file_2\033[92m passed \033[0m")
 
-'''
-    def test_histogram_degree_is_a_str(self):
-        histogram_str_1 = histogram_degree(file_test_1, 1, 2)
-        self.assertEqual(type(histogram_str_1), str)
-        print(f"test_histogram_degree_is_a_str file_1\033[92m passed \033[0m")
-        histogram_str_2 = histogram_degree(file_test_2, 1, 2)
-        self.assertEqual(type(histogram_str_2), str)
-        print(f"test_histogram_degree_is_a_str file_2\033[92m passed \033[0m")
-'''
+def test_histogram_degree(self):
+        assert histogram_degree(file_test_1, 1, 2) == "1 **\n2 **\n"
+        print(f"test_histogram_degree file_1\033[92m passed \033[0m")
+        assert histogram_degree(file_test_2, 9, 9) == "9 *********************************************************************************************************************************************************************************************************************\n"
+        print(f"test_histogram_degree file_2\033[92m passed \033[0m")
+
 
     
 if __name__ == '__main__':
