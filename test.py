@@ -101,6 +101,10 @@ class TestStructure(unittest.TestCase):
         self.assertEqual(type(edges_int), int)
         print(f"test_count_edges_is_a_int file_2\033[92m passed \033[0m")
 
+        
+'''
+Tests that check if functions work properly 
+'''
 
 class Test_Results(unittest.TestCase):
     def test_read_interaction_file_dict(self):
