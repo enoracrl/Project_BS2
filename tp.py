@@ -1,8 +1,17 @@
-#                                           Lecture d’un graphe d’interactions entre protéines
+'''Docstring d'une ligne décrivant brièvement ce que fait le programme. 2
 
-#                                                       Léa BEAULIEU - Enora CORLER
-#                                                             M2 Parcours BIS
+Usage:
 
+======
+python nom_de_ce_super_script.py argument1 argument2
+
+argument1: un entier signifiant un truc
+argument2: une chaîne de caractères décrivant un bidule
+'''
+
+__authors__ = ("Enora CORLER", "Léa BEAULIEU")
+__contact__ = ("enora.corler@etudiant.univ-rennes1.fr", "lea.beaulieu@etudiant.univ-rennes1.fr")
+__date__ = "05/10/2022"
 
 '''
 
@@ -204,10 +213,8 @@ def count_degree(file, deg):
 
 def histogram_degree(file, dmin, dmax):
     '''
-    ko
-    compris c'est à dire inclus ?
-    [dmin, dmax] ou ]dmin, dmax[ ???
-    pcq range c'est ]dmin, dmax]
+    ok
+    ]dmin, dmax[
     '''
     count_prot = 0
     deg_int = {}
