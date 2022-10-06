@@ -29,10 +29,11 @@ class Interactome :
         #self.text = []
         int_dict = {}
         int_list = []
+        text = []
         with open(file, 'r', encoding="utf-8") as file_reader :
             for line in file_reader.readlines()[1:] :
+                text.append(line.split())
                 int_list.append(tuple(line.split()))
-                #self.text.append(line.split())
                 int1, int2 = line.split()
                 if int1 not in int_dict :
                     int_dict[int1] = [int2]
@@ -42,6 +43,7 @@ class Interactome :
                     int_dict[int2] = [int1]
                 else :
                     int_dict[int2].append(int1)
+        self.text = text
         self.int_list = int_list
         self.int_dict = int_dict
         '''count = sum([len(elem) for elem in self.text[1:]])
@@ -93,6 +95,18 @@ class Interactome :
         ok tested
         '''
         return (self.get_int_dict(), self.get_int_list(), self.get_mat(), self.get_proteins())
+    
+    def is_interaction_file(self):
+        '''
+        ko tested maybe in constructor directly ?
+        '''
+        interactions = str(len(self.get_int_list()))
+        self.text.insert(0, interactions)
+        count = sum([len(elem) for elem in self.text[1:]])
+        if self.text != [] and self.text[0][0].isnumeric() is True :
+            if len(self.text[1:]) == int(self.text[0]) and count % 2 == 0:
+                return True
+        return False
 
     def count_vertices(self) :
         '''
@@ -110,19 +124,25 @@ class Interactome :
 
     def clean_interactome(self, fileout):
         '''
-        ko
+        ok tested but maybe in constructor as well?
         '''
+        # remove homo-dimers : ok 
         for i in range(1, len(self.get_int_list())-1):
             if self.get_int_list()[i][0] == self.get_int_list()[i][1]:
                 del self.get_int_list()[i]
         # we remove duplicates from our list of lists
         clean_text = list(l for l, _ in itertools.groupby(self.get_int_list()))
-        # we modify the initial number of interactions by the newest value
-        clean_text[0] = str(len(clean_text[1:]))
+        for i in clean_text:
+            for j in reversed(clean_text):
+                if i ==tuple(reversed(j)) :
+                    clean_text.remove(j)
+        # we modify the initial number of interactions by the newest value : ok
+        clean_text.insert(0,str(len(clean_text)))
+        # we write into a new tabulated file the modifications
         with open(fileout, "w+", encoding="utf-8") as file_writer:
             file_writer.write(clean_text[0]+"\n")
             for i in clean_text[1:]:
-                file_writer.write(str(i[0]) + str(" ") + str(i[1])+"\n")
+                file_writer.write(str(i[0]) + "\t" + str(i[1])+"\n")
 
     def get_degree(self, prot) :
         '''
@@ -184,3 +204,8 @@ class Interactome :
 if __name__ == "__main__":
     interactome1 = Interactome("toy_example.txt")   # objet de la classe Interactome
     interactome2 = Interactome("Human_HighQuality.txt")
+    #false_interactome1 = Interactome("false_file_example-1.txt")
+    #false_interactome2 = Interactome("false_file_example-2.txt")
+    #false_interactome3 = Interactome("false_file_example-3.txt")
+    #false_interactome4 = Interactome("false_file_example-4.txt")
+    interactome_to_clean = Interactome("toy_example_to_clean.txt")
