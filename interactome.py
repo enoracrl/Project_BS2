@@ -19,78 +19,95 @@ import numpy as np
 class Interactome :
     '''
     A class to explore the interactome.
-    
-    
-    Attributes :
-        int_list : the list of all interactions
-        int_dic : a dictionnary that regroups all the interactions
-        self.matrix : the adjacency matrix of the interactions
-    
+
     Methods :
-        ?
+        We read the file for a reasonable number of times to construct the object,
+        and then manipulate the data structure as we want
     '''
-    def __init__(self, file):#, int_list, int_dict, proteins):
+    def __init__(self, file) :
         '''
         Construct all the necessary attributes for the interactome object.
+
+        Args :
+            a tabulate file, .txt format
+
+        Attributes :
+            int_list : the list of all interactions
+            int_dic : a dictionnary that regroups all the interactions
+            self.matrix : the adjacency matrix of the interactions
 
         Parameters :
             int_list : the list of all interactions
             int_dic : a dictionnary that regroups all the interactions
-            self.matrix : the adjacency matrix of the interactions
+            self.matrix : the adjacency matrix of the interaction
         '''
         self.file = file
         self.matrix = []
-        #self.text = []
         int_dict = {}
         int_list = []
         text = []
+        number_interactions = ""
         with open(file, 'r', encoding="utf-8") as file_reader :
-            for line in file_reader.readlines()[1:] :
-                text.append(line.split())
-                int_list.append(tuple(line.split()))
-                int1, int2 = line.split()
-                if int1 not in int_dict :
-                    int_dict[int1] = [int2]
-                else :
-                    int_dict[int1].append(int2)
-                if int2 not in int_dict :
-                    int_dict[int2] = [int1]
-                else :
-                    int_dict[int2].append(int1)
+            if file_reader.readlines() != [] :
+                number_interactions = file_reader.readlines()[0][0]
+                for line in file_reader.readlines()[1:] :
+                    text.append(line.split())
+                    int_list.append(tuple(line.split()))
+                    int1, int2 = line.split()
+                    if int1 not in int_dict :
+                        int_dict[int1] = [int2]
+                    else :
+                        int_dict[int1].append(int2)
+                    if int2 not in int_dict :
+                        int_dict[int2] = [int1]
+                    else :
+                        int_dict[int2].append(int1)
         self.text = text
+        self.number_interactions = number_interactions
         self.int_list = int_list
         self.int_dict = int_dict
-        '''count = sum([len(elem) for elem in self.text[1:]])
-        if self.text != [] and self.text[0][0].isnumeric() is True :
-            if len(self.text[1:]) == int(text[0][0]) and count % 2 == 0:
-                return True
-        return False'''
 
     # ACCESSEURS
-    def get_int_list(self):
+    def get_int_list(self) :
         '''
-        Return the list of interactions.
+        Return the instance variable of the list of interactions.
         '''
         return self.int_list
 
-    def get_int_dict(self):
+    def get_int_dict(self) :
         '''
-        Return the dictionnary of interactions.
+        Return the instance variable of the dictionnary of interactions.
         '''
         return self.int_dict
 
-    def get_mat(self):
+    def get_mat(self) :
         '''
-        Return the matrix of interactions
+        Return the instance variable of the matrix of interactions
         '''
         self.matrix = self.read_interaction_file_mat()[1]
         return self.matrix
 
-    def read_interaction_file_mat(self):
+    # METHODS OF THE CLASS
+    def is_interaction_file(self) :
         '''
-        Return an adjacency matrix that show 1 every time there is an interaction between two vertices.
-        Also return a list that contains all vertices in the order of the matrix.
-        
+        Return a boolean that return True if all conditions (correct file format) are True and
+        return False (wrong file format) if one of them is False for a specific file given.
+
+        Output :
+            True : if the file is not empty, with a correct number of interactions/lines/columns
+            False : if at least one of the condition above is not respected
+        '''
+        count = sum([len(elem) for elem in self.text[1:]])
+        if self.number_interactions.isnumeric() is True :
+            if len(self.text[1:]) == int(self.number_interactions) and count % 2 == 0 :
+                return True
+        return False
+
+    def read_interaction_file_mat(self) :
+        '''
+        Return an adjacency matrix that show 1 every time there is an interaction between
+        two vertices. Also return a list that contains all vertices in the order of the matrix.
+
         Output :
             proteins : a list with all proteins in the order of the matrix
             matrix : a matrix (np.ndarrays())
@@ -106,35 +123,18 @@ class Interactome :
         '''
         Return a triplet, the first element is the interaction dictionnary, the second
         one is the interaction list and the last one is the ordered list of vertices.
-        
+
         Output :
             d_int, l_int, l_som, m_int : dict(), list(), list() and a matrix (np.ndarrays())
         '''
         return (self.get_int_dict(), self.get_int_list(), self.read_interaction_file_mat()[0],
                 self.get_mat())
 
-    def is_interaction_file(self):
-        '''
-        Return a boolean that return True if all conditions (correct file format) are True and
-        return False (wrong file format) if one of them is False for a specific file given.
-       
-        Output :
-            True : if the file is not empty, with a correct number of interactions/lines/columns
-            False : if at least one of the condition above is not respected
-        '''
-        interactions = str(len(self.get_int_list()))
-        self.text.insert(0, interactions)
-        count = sum([len(elem) for elem in self.text[1:]])
-        if self.text[0][0].isnumeric() is True :
-            if len(self.text[1:]) == int(self.text[0]) and count % 2 == 0:
-                return True
-        return False
-
     def count_vertices(self) :
         '''
         Return the number of vertices by counting the numbers of keys of the
         interaction dictionnary (= the number of vertices)
-        
+
         Output :
             number_of_vertices : an int (number of vertices)
         '''
@@ -144,20 +144,21 @@ class Interactome :
     def count_edges(self) :
         '''
         Return the number of edges.
-        
+
         Output :
             number_of_edges : an int (number of edges)
         '''
         number_of_edges = len(self.get_int_list())
         return number_of_edges
 
-    def clean_interactome(self, fileout):
+    def clean_interactome(self, fileout) :
         '''
         Return an output file that is the same file as the input file but without
         any duplicate interactions or homo-dimers.
 
         Args :
-            fileout : a non-existing file, .txt format
+            fileout : the path of a file which will be written in output, .txt format
+
         Output :
             fileout : a tabulate file based on the filein file, cleaned from
             all repetitions/homo-dimers
@@ -221,10 +222,10 @@ class Interactome :
         mean_degree = round(sum_degree/count_prot, 4)
         return mean_degree
 
-    def count_degree(self, deg):
+    def count_degree(self, deg) :
         '''
         Return the number of proteins that have the same degree as the one in the argument.
-        
+
         Args :
             deg : the degree we want to explore
         Output :
@@ -238,10 +239,10 @@ class Interactome :
                 same_degree_prot += 1
         return same_degree_prot
 
-    def histogram_degree(self, dmin, dmax):
+    def histogram_degree(self, dmin, dmax) :
         '''
         Print for a given range [dmin, dmax] the number of proteins that have the degree d.
-        
+
         Args :
             dmin : the minimum degree of the range
             dmax : the maximum degree of the range
@@ -251,19 +252,18 @@ class Interactome :
         count_prot = 0
         deg_int = {}
         for deg in range(dmin, dmax+1):
-            if deg not in deg_int.keys():
+            if deg not in deg_int :
                 deg_int[deg] = self.count_degree(deg)
             else:
                 count_prot += self.count_degree(deg)
         for nb_deg, nb_prot in deg_int.items():
             print(str(nb_deg), nb_prot*"*", sep=" ")
 
-if __name__ == "__main__":
+if __name__ == "__main__" :
     interactome1 = Interactome("toy_example.txt")   # objet de la classe Interactome
     interactome2 = Interactome("Human_HighQuality.txt")
-    #false_interactome1 = Interactome("false_file_example-1.txt")
-    #false_interactome2 = Interactome("false_file_example-2.txt")
-    #false_interactome3 = Interactome("false_file_example-3.txt")
-    #false_interactome4 = Interactome("false_file_example-4.txt")
+    false_interactome1 = Interactome("false_file_example-1.txt")
+    false_interactome2 = Interactome("false_file_example-2.txt")
+    false_interactome3 = Interactome("false_file_example-3.txt")
+    false_interactome4 = Interactome("false_file_example-4.txt")
     interactome_to_clean = Interactome("toy_example_to_clean.txt")
-    print(interactome2.get_mat())
