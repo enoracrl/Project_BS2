@@ -47,7 +47,7 @@ def read_interaction_file_list(file) -> list:
     '''
     with open(file, 'r', encoding="utf-8") as file_reader:
         interactions_list = [tuple(line.split())
-                             for line in file_reader.readlines()[1:]]
+            for line in file_reader.readlines()[1:]]
     return interactions_list
 
 
@@ -154,8 +154,12 @@ def clean_interactome(filein, fileout):
             del text[i]
     # we remove duplicates from our list of lists
     text = list(l for l, _ in itertools.groupby(text))
-    # we modify the initial number of interactions by the newest value
-    text[0] = str(len(text[1:]))
+    for i in text:
+        for j in reversed(text):
+            if i ==tuple(reversed(j)) :
+                text.remove(j)
+    # we modify the initial number of interactions by the newest value : ok
+    text.insert(0,str(len(text)))
     with open(fileout, "w+", encoding="utf-8") as file_writer:
         file_writer.write(text[0]+"\n")
         for i in text[1:]:
