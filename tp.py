@@ -97,7 +97,7 @@ def is_interaction_file(file):
     Args :
         file : a tabulate file, .txt format
     Output :
-        True : if the file is the file is not empty, with a correct number of
+        True : if the file is not empty, with a correct number of
         interactions/lines/columns
         False : if at least one of the condition above is not respected
     '''
