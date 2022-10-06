@@ -167,7 +167,12 @@ def clean_interactome(filein, fileout):
 
 def get_degree(file, prot:str) -> int:
     '''
-    ok
+    Return the protein degree.
+    Args :
+        file : a tabulate file to be cleaned, .txt format
+        prot : the name of a protein existing in the file
+    Output :
+        protein_degree : an int (number of vertices that are linked to the protein)
     '''
     interactions_dic = read_interaction_file_dict(file)
     if prot not in interactions_dic:
@@ -177,7 +182,12 @@ def get_degree(file, prot:str) -> int:
 
 def get_max_degree(file) -> tuple:
     '''
-    ok
+    Return the maximum degree of the file.
+    Args :
+        file : a tabulate file to be cleaned, .txt format
+    Output :
+        proteins : a str (name of the protein(s) that have the maximum degree)
+        max_degree : an int (maximum degree of the file)
     '''
     interactome_dict = read_interaction_file_dict(file)
     max_degree = max(len(item) for item in interactome_dict.values())
@@ -186,7 +196,11 @@ def get_max_degree(file) -> tuple:
 
 def get_ave_degree(file) -> float:
     '''
-    ok
+    Return the mean degree of the file.
+    Args :
+        file : a tabulate file to be cleaned, .txt format
+    Output :
+        mean_degree : an int (mean degree of the file)
     '''
     sum_degree = 0
     interactions_dic = read_interaction_file_dict(file)
@@ -198,7 +212,12 @@ def get_ave_degree(file) -> float:
 
 def count_degree(file, deg):
     '''
-    ok
+    Return the number of proteins that have the same degree as the one in the argument.
+    Args :
+        file : a tabulate file to be cleaned, .txt format
+        deg : the degree we want to explore
+    Output :
+        same_degree_prot : an int (number of proteins that have the same degree)
     '''
     same_degree_prot = 0
     if deg < 0 :
@@ -211,8 +230,13 @@ def count_degree(file, deg):
 
 def histogram_degree(file, dmin, dmax):
     '''
-    ok
-    ]dmin, dmax[
+    Print for a given range [dmin, dmax] the number of proteins that have the degree d.
+    Args :
+        file : a tabulate file to be cleaned, .txt format
+        dmin : the minimum degree of the range
+        dmax : the maximum degree of the range
+    Output :
+        print histogram_degree() : print a "*" for every proteins that have the degree nb_deg
     '''
     count_prot = 0
     deg_int = {}
