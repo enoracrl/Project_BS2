@@ -25,7 +25,7 @@ class Interactome :
         constructeur avec attributs d'instances
         '''
         self.file = file
-        self.proteins = []
+        self.matrix = []
         #self.text = []
         int_dict = {}
         int_list = []
@@ -65,19 +65,12 @@ class Interactome :
         '''
         return self.int_dict
 
-    def get_proteins(self):
-        '''
-        ok tested
-        '''
-        self.proteins = self.read_interaction_file_mat()[0]
-        return self.proteins
-
     def get_mat(self):
         '''
         ok tested
         '''
-        matrix = self.read_interaction_file_mat()[1]
-        return matrix
+        self.matrix = self.read_interaction_file_mat()[1]
+        return self.matrix
 
     def read_interaction_file_mat(self):
         '''
@@ -94,8 +87,9 @@ class Interactome :
         '''
         ok tested
         '''
-        return (self.get_int_dict(), self.get_int_list(), self.get_mat(), self.get_proteins())
-    
+        return (self.get_int_dict(), self.get_int_list(), self.read_interaction_file_mat()[0],
+                self.get_mat())
+
     def is_interaction_file(self):
         '''
         ko tested maybe in constructor directly ?
@@ -103,7 +97,7 @@ class Interactome :
         interactions = str(len(self.get_int_list()))
         self.text.insert(0, interactions)
         count = sum([len(elem) for elem in self.text[1:]])
-        if self.text != [] and self.text[0][0].isnumeric() is True :
+        if self.text[0][0].isnumeric() is True :
             if len(self.text[1:]) == int(self.text[0]) and count % 2 == 0:
                 return True
         return False
@@ -126,7 +120,7 @@ class Interactome :
         '''
         ok tested but maybe in constructor as well?
         '''
-        # remove homo-dimers : ok 
+        # remove homo-dimers : ok
         for i in range(1, len(self.get_int_list())-1):
             if self.get_int_list()[i][0] == self.get_int_list()[i][1]:
                 del self.get_int_list()[i]
@@ -209,3 +203,4 @@ if __name__ == "__main__":
     #false_interactome3 = Interactome("false_file_example-3.txt")
     #false_interactome4 = Interactome("false_file_example-4.txt")
     interactome_to_clean = Interactome("toy_example_to_clean.txt")
+    print(interactome2.get_mat())
