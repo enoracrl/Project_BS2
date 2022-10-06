@@ -18,11 +18,25 @@ import numpy as np
 
 class Interactome :
     '''
-    class
+    A class to explore the interactome.
+    
+    
+    Attributes :
+        int_list : the list of all interactions
+        int_dic : a dictionnary that regroups all the interactions
+        self.matrix : the adjacency matrix of the interactions
+    
+    Methods :
+        ?
     '''
     def __init__(self, file):#, int_list, int_dict, proteins):
         '''
-        constructeur avec attributs d'instances
+        Construct all the necessary attributes for the interactome object.
+
+        Parameters :
+            int_list : the list of all interactions
+            int_dic : a dictionnary that regroups all the interactions
+            self.matrix : the adjacency matrix of the interactions
         '''
         self.file = file
         self.matrix = []
@@ -55,26 +69,31 @@ class Interactome :
     # ACCESSEURS
     def get_int_list(self):
         '''
-        ok tested
+        Return the list of interactions.
         '''
         return self.int_list
 
     def get_int_dict(self):
         '''
-        ok tested
+        Return the dictionnary of interactions.
         '''
         return self.int_dict
 
     def get_mat(self):
         '''
-        ok tested
+        Return the matrix of interactions
         '''
         self.matrix = self.read_interaction_file_mat()[1]
         return self.matrix
 
     def read_interaction_file_mat(self):
         '''
-        ok tested
+        Return an adjacency matrix that show 1 every time there is an interaction between two vertices.
+        Also return a list that contains all vertices in the order of the matrix.
+        
+        Output :
+            proteins : a list with all proteins in the order of the matrix
+            matrix : a matrix (np.ndarrays())
         '''
         proteins = list(self.int_dict.keys())
         matrix = np.zeros((len(proteins), len(proteins)), dtype=int)
@@ -85,14 +104,23 @@ class Interactome :
 
     def read_interaction_file(self) :
         '''
-        ok tested
+        Return a triplet, the first element is the interaction dictionnary, the second
+        one is the interaction list and the last one is the ordered list of vertices.
+        
+        Output :
+            d_int, l_int, l_som, m_int : dict(), list(), list() and a matrix (np.ndarrays())
         '''
         return (self.get_int_dict(), self.get_int_list(), self.read_interaction_file_mat()[0],
                 self.get_mat())
 
     def is_interaction_file(self):
         '''
-        ko tested maybe in constructor directly ?
+        Return a boolean that return True if all conditions (correct file format) are True and
+        return False (wrong file format) if one of them is False for a specific file given.
+       
+        Output :
+            True : if the file is not empty, with a correct number of interactions/lines/columns
+            False : if at least one of the condition above is not respected
         '''
         interactions = str(len(self.get_int_list()))
         self.text.insert(0, interactions)
@@ -104,21 +132,35 @@ class Interactome :
 
     def count_vertices(self) :
         '''
-        ok tested
+        Return the number of vertices by counting the numbers of keys of the
+        interaction dictionnary (= the number of vertices)
+        
+        Output :
+            number_of_vertices : an int (number of vertices)
         '''
         number_of_vertices = len(self.get_int_dict().keys())
         return number_of_vertices
 
     def count_edges(self) :
         '''
-        ok tested
+        Return the number of edges.
+        
+        Output :
+            number_of_edges : an int (number of edges)
         '''
         number_of_edges = len(self.get_int_list())
         return number_of_edges
 
     def clean_interactome(self, fileout):
         '''
-        ok tested but maybe in constructor as well?
+        Return an output file that is the same file as the input file but without
+        any duplicate interactions or homo-dimers.
+
+        Args :
+            fileout : a non-existing file, .txt format
+        Output :
+            fileout : a tabulate file based on the filein file, cleaned from
+            all repetitions/homo-dimers
         '''
         # remove homo-dimers : ok
         for i in range(1, len(self.get_int_list())-1):
@@ -140,7 +182,12 @@ class Interactome :
 
     def get_degree(self, prot) :
         '''
-        ok tested
+        Return the protein degree.
+
+        Args :
+            prot : the name of a protein existing in the file
+        Output :
+            protein_degree : an int (number of vertices that are linked to the protein)
         '''
         if prot not in self.get_int_dict() :
             raise ValueError("This protein is not in this graph")
@@ -149,8 +196,11 @@ class Interactome :
 
     def get_max_degree(self) :
         '''
-        ok tested but if only one prot --> tuple like "("prot",)"
-        --> should be "("prot")" or "prot" !!!
+        Return the maximum degree of the file.
+
+        Output :
+            proteins : a str (name of the protein(s) that have the maximum degree)
+            max_degree : an int (maximum degree of the file)
         '''
         max_degree = max(len(item) for item in self.get_int_dict().values())
         protein = tuple(key for key, values in self.get_int_dict().items()
@@ -159,7 +209,10 @@ class Interactome :
 
     def get_ave_degree(self) :
         '''
-        ok tested
+        Return the mean degree of the file.
+
+        Output :
+            mean_degree : an int (mean degree of the file)
         '''
         sum_degree = 0
         for prot in self.get_int_dict() :
@@ -170,7 +223,12 @@ class Interactome :
 
     def count_degree(self, deg):
         '''
-        ok tested
+        Return the number of proteins that have the same degree as the one in the argument.
+        
+        Args :
+            deg : the degree we want to explore
+        Output :
+            same_degree_prot : an int (number of proteins that have the same degree)
         '''
         if deg < 0 :
             raise ValueError("You must choose a positive degree")
@@ -182,8 +240,13 @@ class Interactome :
 
     def histogram_degree(self, dmin, dmax):
         '''
-        ok tested
-        inclus : ]dmin, dmax[
+        Print for a given range [dmin, dmax] the number of proteins that have the degree d.
+        
+        Args :
+            dmin : the minimum degree of the range
+            dmax : the maximum degree of the range
+        Output :
+            print histogram_degree() : print a "*" for every proteins that have the degree nb_deg
         '''
         count_prot = 0
         deg_int = {}
