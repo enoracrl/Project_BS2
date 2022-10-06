@@ -75,7 +75,7 @@ def read_interaction_file(file):
     Args :
         file : a tabulate file, .txt format
     Output :
-        d_int, l_int, m_int, l_som : dict(), list(), list() and a matrix (np.ndarrays())
+        d_int, l_int, l_som, m_int : dict(), list(), list() and a matrix (np.ndarrays())
     '''
     d_int = read_interaction_file_dict(file)
     l_int = read_interaction_file_list(file)
