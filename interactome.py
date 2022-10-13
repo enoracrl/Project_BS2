@@ -15,6 +15,7 @@ __date__ = "05/10/2022"
 
 import itertools
 import numpy as np
+from fractions import Fraction
 
 class Interactome :
     '''
@@ -48,9 +49,10 @@ class Interactome :
         text = []
         number_interactions = ""
         with open(file, 'r', encoding="utf-8") as file_reader :
-            if file_reader.readlines() != [] :
-                number_interactions = file_reader.readlines()[0][0]
-                for line in file_reader.readlines()[1:] :
+            text = file_reader.readlines()
+            if text != [] :
+                number_interactions = text[0][0]
+                for line in text[1:] :
                     text.append(line.split())
                     int_list.append(tuple(line.split()))
                     int1, int2 = line.split()
@@ -258,12 +260,42 @@ class Interactome :
                 count_prot += self.count_degree(deg)
         for nb_deg, nb_prot in deg_int.items():
             print(str(nb_deg), nb_prot*"*", sep=" ")
+    
+    def density(self) :
+        '''
+        density : number of edges in the interactome / maximal number of edges that the interactome
+        could have
+        ok
+        0.4 --> toy_example
+        '''
+        max_edges = self.count_vertices()*(self.count_vertices()-1)/2   # n*(n-1)/2
+        density = round(self.count_edges() / max_edges, 4)              # edges / max_edges
+        return density
 
+    def clustering(self, prot) :
+        '''
+        C_A = 1/1 = 1 ; C_B = 1/3 ; C_C = 1/3 ; C_D = 0/3 = 0 ; C_E = 0/0 = 0 ; C_F = 0/0 = 0
+        '''
+        max_degree_prot = self.get_degree(prot)*(self.get_degree(prot)-1)/2
+        if max_degree_prot == 0:
+            coeff_clustering = float(0)
+        else:
+            count = 0
+            for i in self.get_int_dict()[prot]:
+                for j in self.get_int_dict()[i]:
+                    if j in self.get_int_dict()[prot]:
+                        count+=1
+            if count >0:
+                count -= 1
+            coeff_clustering = count/max_degree_prot
+        return coeff_clustering
+
+    
 if __name__ == "__main__" :
     interactome1 = Interactome("toy_example.txt")   # objet de la classe Interactome
     interactome2 = Interactome("Human_HighQuality.txt")
-    false_interactome1 = Interactome("false_file_example-1.txt")
-    false_interactome2 = Interactome("false_file_example-2.txt")
-    false_interactome3 = Interactome("false_file_example-3.txt")
-    false_interactome4 = Interactome("false_file_example-4.txt")
-    interactome_to_clean = Interactome("toy_example_to_clean.txt")
+    #false_interactome1 = Interactome("false_file_example-1.txt")
+    #false_interactome2 = Interactome("false_file_example-2.txt")
+    #false_interactome3 = Interactome("false_file_example-3.txt")
+    #false_interactome4 = Interactome("false_file_example-4.txt")
+    #interactome_to_clean = Interactome("toy_example_to_clean.txt")
