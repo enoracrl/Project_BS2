@@ -16,6 +16,8 @@ __date__ = "05/10/2022"
 import itertools
 import numpy as np
 from fractions import Fraction
+import networkx as nx
+import matplotlib.pyplot as plt
 
 class Interactome :
     '''
@@ -289,11 +291,27 @@ class Interactome :
                 count -= 1
             coeff_clustering = count/max_degree_prot
         return coeff_clustering
-
+    
+    def ER_graph(self):
+        '''
+        GENERATING ERDÖS-RÉNYI RANDOM GRAPHS G(n, M) where n = number of vertices, and M = number of edges
+        P(k)=ck^y
+        '''
+        G = nx.Graph()
+        #G.add_nodes_from(self.get_int_list())
+        G.add_edges_from(self.get_int_list())
+        return G
+    
+    def barabasi_graph(self, n, m):
+        '''
+        GENERATING BARABASI RANDOM GRAPHS 
+        '''
+        pass
     
 if __name__ == "__main__" :
     interactome1 = Interactome("toy_example.txt")   # objet de la classe Interactome
     interactome2 = Interactome("Human_HighQuality.txt")
+    print(interactome1.ER_graph())
     #false_interactome1 = Interactome("false_file_example-1.txt")
     #false_interactome2 = Interactome("false_file_example-2.txt")
     #false_interactome3 = Interactome("false_file_example-3.txt")
