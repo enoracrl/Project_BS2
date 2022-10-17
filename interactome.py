@@ -265,8 +265,11 @@ class Interactome :
     
     def density(self) :
         '''
-        density : number of edges in the interactome / maximal number of edges that the interactome
-        could have
+        Return the density of the interactome.
+        Output :
+            density : a float (number of edges in the interactome / maximal number of edges that the interactome
+            could have)
+            
         ok
         0.4 --> toy_example
         '''
@@ -276,6 +279,13 @@ class Interactome :
 
     def clustering(self, prot) :
         '''
+        Return the local clustering coefficient.
+        Args :
+            prot : vertice we want to know the local clustering coefficient
+        Output :
+            coeff_clustering : a float (number of edges of the protein neighbors / maximal number of edges that it
+            could have)
+            
         C_A = 1/1 = 1 ; C_B = 1/3 ; C_C = 1/3 ; C_D = 0/3 = 0 ; C_E = 0/0 = 0 ; C_F = 0/0 = 0
         '''
         max_degree_prot = self.get_degree(prot)*(self.get_degree(prot)-1)/2
