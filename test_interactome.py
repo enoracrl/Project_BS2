@@ -25,6 +25,7 @@ file_test_2 = "Human_HighQuality.txt"
 # a file without the number of interactions on the first line
 false_file_1 = "false_file_example-1.txt"
 false_file_2 = "false_file_example-2.txt"     # an empty file
+false_file_2 = "false_file_example-2.txt"     # a empty file
 # a file with a number of lines =/= number of interactions
 false_file_3 = "false_file_example-3.txt"
 # a file with a wrong number of columns
