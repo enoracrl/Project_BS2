@@ -15,7 +15,6 @@ __date__ = "05/10/2022"
 
 import itertools
 import numpy as np
-from fractions import Fraction
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -51,13 +50,13 @@ class Interactome :
         text = []
         number_interactions = ""
         with open(file, 'r', encoding="utf-8") as file_reader :
-            text = file_reader.readlines()
+            text = [line.split() for line in file_reader]
             if text != [] :
                 number_interactions = text[0][0]
                 for line in text[1:] :
-                    text.append(line.split())
-                    int_list.append(tuple(line.split()))
-                    int1, int2 = line.split()
+                    int_list.append(tuple(line))
+                    #if len(int_list) % 2 == 0:
+                    int1, int2 = line
                     if int1 not in int_dict :
                         int_dict[int1] = [int2]
                     else :
@@ -66,7 +65,7 @@ class Interactome :
                         int_dict[int2] = [int1]
                     else :
                         int_dict[int2].append(int1)
-        self.text = text
+        self.text = text[1:]
         self.number_interactions = number_interactions
         self.int_list = int_list
         self.int_dict = int_dict
@@ -103,7 +102,7 @@ class Interactome :
         '''
         count = sum([len(elem) for elem in self.text[1:]])
         if self.number_interactions.isnumeric() is True :
-            if len(self.text[1:]) == int(self.number_interactions) and count % 2 == 0 :
+            if len(self.text) == int(self.number_interactions) and count % 2 == 0 :
                 return True
         return False
 
@@ -126,7 +125,8 @@ class Interactome :
     def read_interaction_file(self) :
         '''
         Return a triplet, the first element is the interaction dictionnary, the second
-        one is the interaction list and the last one is the ordered list of vertices.
+        one is the interaction list, the third one the matrix, and the last one is the 
+        ordered list of vertices.
 
         Output :
             d_int, l_int, l_som, m_int : dict(), list(), list() and a matrix (np.ndarrays())
@@ -307,23 +307,11 @@ class Interactome :
         GENERATING ERDÖS-RÉNYI RANDOM GRAPHS G(n, M) where n = number of vertices, and M = number of edges
         P(k)=ck^y
         '''
-        G = nx.Graph()
-        #G.add_nodes_from(self.get_int_list())
-        G.add_edges_from(self.get_int_list())
-        return G
+        pass
     
     def barabasi_graph(self, n, m):
         '''
         GENERATING BARABASI RANDOM GRAPHS 
         '''
         pass
-    
-if __name__ == "__main__" :
-    interactome1 = Interactome("toy_example.txt")   # objet de la classe Interactome
-    interactome2 = Interactome("Human_HighQuality.txt")
-    print(interactome1.ER_graph())
-    #false_interactome1 = Interactome("false_file_example-1.txt")
-    #false_interactome2 = Interactome("false_file_example-2.txt")
-    #false_interactome3 = Interactome("false_file_example-3.txt")
-    #false_interactome4 = Interactome("false_file_example-4.txt")
-    #interactome_to_clean = Interactome("toy_example_to_clean.txt")
+

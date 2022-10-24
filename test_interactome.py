@@ -1,4 +1,5 @@
-'''Testing functions for the interactome.py file
+'''
+Testing functions for the interactome.py file
 '''
 
 __authors__ = ("Enora CORLER", "Léa BEAULIEU")
@@ -17,17 +18,17 @@ from interactome import *
 '''
 Testing files
 '''
-file_test_1 = "C:/Users/leabe/OneDrive/Bureau/BS2/TP_projet/toy_example.txt"           # simple file with only 6 interactions between letters
+file_test_1 = "toy_example.txt"           # simple file with only 6 interactions between letters
 # complex file with 27276 interactions
-file_test_2 = "C:/Users/leabe/OneDrive/Bureau/BS2/TP_projet/Human_HighQuality.txt"
+file_test_2 = "Human_HighQuality.txt"
 
 # a file without the number of interactions on the first line
-false_file_1 = "C:/Users/leabe/OneDrive/Bureau/BS2/TP_projet/false_file_example-1.txt"
-false_file_2 = "C:/Users/leabe/OneDrive/Bureau/BS2/TP_projet/false_file_example-2.txt"     # a empty file
+false_file_1 = "false_file_example-1.txt"
+false_file_2 = "false_file_example-2.txt"     # an empty file
 # a file with a number of lines =/= number of interactions
-false_file_3 = "C:/Users/leabe/OneDrive/Bureau/BS2/TP_projet/false_file_example-3.txt"
+false_file_3 = "false_file_example-3.txt"
 # a file with a wrong number of columns
-false_file_4 = "C:/Users/leabe/OneDrive/Bureau/BS2/TP_projet/false_file_example-4.txt"
+false_file_4 = "false_file_example-4.txt"
 
 
 class test_results(unittest.TestCase):
