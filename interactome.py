@@ -1,4 +1,4 @@
-"""Docstring d'une ligne décrivant brièvement ce que fait le programme. 2
+"""Object interactome which allows to manipulate graphs, and to introduce into these graphs a notion of interaction between protein domains
 
 Usage:
 
@@ -17,6 +17,8 @@ import itertools
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+import random
 
 class Interactome :
     '''
@@ -302,16 +304,31 @@ class Interactome :
             coeff_clustering = count/max_degree_prot
         return coeff_clustering
     
-    def ER_graph(self):
+    def graph_ER(self, p:float):
         '''
-        GENERATING ERDÖS-RÉNYI RANDOM GRAPHS G(n, M) where n = number of vertices, and M = number of edges
+        GENERATING ERDÖS-RÉNYI RANDOM GRAPHS G(n, p) where n = number of vertices, and p = probabilty of
+        a vertice to be present
         P(k)=ck^y
         '''
-        pass
+        n = self.count_edges()
+        #m = n*(n-1)/2
+        g = nx.Graph()
+        g.add_nodes_from(range(1, n + 1))
+        for i in g.nodes():
+            for j in g.nodes():
+                if (i < j):
+                    if np.random.binomial(1, p) == 1:
+                        g.add_edge(i, j)
+        return g
     
-    def barabasi_graph(self, n, m):
+    def graph_ba(self):
         '''
         GENERATING BARABASI RANDOM GRAPHS 
+        p(a_si = 1) = k_i / Sum(k_j)
         '''
-        pass
+        n = self.count_edges()
+        if n < 2 :
+            raise ValueError
+        
+        
 
