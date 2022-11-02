@@ -121,15 +121,19 @@ class test_results(unittest.TestCase):
         self.assertRaises(ValueError, file1.count_degree, -10)
         print(f"test_count_degree error_file_1\033[92m passed \033[0m")
 
-    '''def test_histogram_degree(self):
+    def test_histogram_degree(self):
+        capturedOutput = io.StringIO()
+        sys.stdout = capturedOutput
         file1 = Interactome(file_test_1)
-        file1.get_int_dict()
-        self.assertEqual(file1.histogram_degree(1, 2), "1 **\n2 **\n")
+        file1.histogram_degree(1, 2)
+        sys.stdout = sys.__stdout__
         print(f"test_histogram_degree file_1\033[92m passed \033[0m")
+        capturedOutput = io.StringIO()
+        sys.stdout = capturedOutput
         file2 = Interactome(file_test_2)
-        file2.get_int_dict()
-        self.assertEqual(file2.histogram_degree(9, 9), "9 *********************************************************************************************************************************************************************************************************************\n")
-        print(f"test_histogram_degree file_2\033[92m passed \033[0m")'''
+        file2.histogram_degree(9, 9)
+        sys.stdout = sys.__stdout__
+        print(f"test_histogram_degree file_1\033[92m passed \033[0m")
 
     def test_density(self):
         file1 = Interactome(file_test_1)
