@@ -1,5 +1,4 @@
-"""Docstring d'une ligne décrivant brièvement ce que fait le programme. 2
-
+"""
 Usage:
 
 ======
