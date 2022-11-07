@@ -1,4 +1,4 @@
-"""Object interactome which allows to manipulate graphs, and to introduce into these graphs a notion of interaction between protein domains
+"""Docstring d'une ligne décrivant brièvement ce que fait le programme. 2
 
 Usage:
 
@@ -17,8 +17,6 @@ import itertools
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
-import random
 
 class Interactome :
     '''
@@ -291,44 +289,32 @@ class Interactome :
         C_A = 1/1 = 1 ; C_B = 1/3 ; C_C = 1/3 ; C_D = 0/3 = 0 ; C_E = 0/0 = 0 ; C_F = 0/0 = 0
         '''
         max_degree_prot = self.get_degree(prot)*(self.get_degree(prot)-1)/2
+        list_prot = [prot]
         if max_degree_prot == 0:
             coeff_clustering = float(0)
         else:
             count = 0
             for i in self.get_int_dict()[prot]:
                 for j in self.get_int_dict()[i]:
-                    if j in self.get_int_dict()[prot]:
+                    if j in self.get_int_dict()[prot] and j not in list_prot :
                         count+=1
+                        list_prot.append(j)
             if count >0:
                 count -= 1
             coeff_clustering = count/max_degree_prot
         return coeff_clustering
     
-    def graph_ER(self, p:float):
+    def grapher(self, p) :
         '''
-        GENERATING ERDÖS-RÉNYI RANDOM GRAPHS G(n, p) where n = number of vertices, and p = probabilty of
-        a vertice to be present
+        GENERATING ERDÖS-RÉNYI RANDOM GRAPHS G(n, p) where n = number of vertices, and p = probability of having vertices
         P(k)=ck^y
         '''
-        n = self.count_edges()
-        #m = n*(n-1)/2
-        g = nx.Graph()
-        g.add_nodes_from(range(1, n + 1))
-        for i in g.nodes():
-            for j in g.nodes():
-                if (i < j):
-                    if np.random.binomial(1, p) == 1:
-                        g.add_edge(i, j)
-        return g
+        pass
     
-    def graph_ba(self):
+    def graphba(self) :
         '''
         GENERATING BARABASI RANDOM GRAPHS 
-        p(a_si = 1) = k_i / Sum(k_j)
         '''
-        n = self.count_edges()
-        if n < 2 :
-            raise ValueError
-        
-        
-
+        pass
+    
+    
