@@ -1,4 +1,5 @@
-"""
+"""Object interactome which allows to manipulate graphs, and to introduce into these graphs a notion of interaction between protein domains
+
 Usage:
 
 ======
@@ -25,7 +26,7 @@ class Interactome :
         We read the file for a reasonable number of times to construct the object,
         and then manipulate the data structure as we want
     '''
-    def __init__(self, file) :
+    def __init__(self, file=None) :
         '''
         Construct all the necessary attributes for the interactome object.
 
@@ -166,7 +167,7 @@ class Interactome :
             fileout : a tabulate file based on the filein file, cleaned from
             all repetitions/homo-dimers
         '''
-        # remove homo-dimers : ok
+        # remove homo-dimers
         for i in range(1, len(self.get_int_list())-1):
             if self.get_int_list()[i][0] == self.get_int_list()[i][1]:
                 del self.get_int_list()[i]
@@ -184,7 +185,7 @@ class Interactome :
             for i in clean_text[1:]:
                 file_writer.write(str(i[0]) + "\t" + str(i[1])+"\n")
 
-    def get_degree(self, prot) :
+    def get_degree(self, prot:str) :
         '''
         Return the protein degree.
 
@@ -225,7 +226,7 @@ class Interactome :
         mean_degree = round(sum_degree/count_prot, 4)
         return mean_degree
 
-    def count_degree(self, deg) :
+    def count_degree(self, deg:int) :
         '''
         Return the number of proteins that have the same degree as the one in the argument.
 
@@ -242,7 +243,7 @@ class Interactome :
                 same_degree_prot += 1
         return same_degree_prot
 
-    def histogram_degree(self, dmin, dmax) :
+    def histogram_degree(self, dmin:int, dmax:int) :
         '''
         Print for a given range [dmin, dmax] the number of proteins that have the degree d.
 
@@ -276,7 +277,7 @@ class Interactome :
         density = round(self.count_edges() / max_edges, 4)              # edges / max_edges
         return density
 
-    def clustering(self, prot) :
+    def clustering(self, prot:str) :
         '''
         Return the local clustering coefficient.
         Args :
@@ -303,17 +304,38 @@ class Interactome :
             coeff_clustering = count/max_degree_prot
         return coeff_clustering
     
-    def grapher(self, p) :
+    def graph_ER(self, p:float) :
         '''
-        GENERATING ERDÖS-RÉNYI RANDOM GRAPHS G(n, p) where n = number of vertices, and p = probability of having vertices
-        P(k)=ck^y
-        '''
-        pass
-    
-    def graphba(self) :
+         GENERATING ERDÖS-RÉNYI RANDOM GRAPHS G(n, p) where n = number of vertices, and p = probabilty of
+         a vertice to be present
+         GENERATING ERDÖS-RÉNYI RANDOM GRAPHS G(n, p) where n = number of vertices, and p = probability of having vertices
+         P(k)=ck^y
+         '''
+        n = self.count_edges()
+        #m = n*(n-1)/2
+        g = nx.Graph()
+        g.add_nodes_from(range(1, n + 1))
+        for i in g.nodes():
+            for j in g.nodes():
+                if (i < j):
+                    if np.random.binomial(1, p) == 1:
+                        g.add_edge(i, j)
+        return g
+
+    def graph_BA(self, m_max) :
         '''
         GENERATING BARABASI RANDOM GRAPHS 
+        p(a_si = 1) = k_i / Sum(k_j)
         '''
-        pass
-    
-    
+        m_init = self.count_edges()
+        sum_degrees = 0
+        for prot in self.read_interaction_file_mat()[0] :
+            sum_degrees += self.get_degree(prot)
+        if m_init < 2 or sum_degrees < 0 :
+            raise ValueError
+        g = nx.Graph(self.get_int_list())
+        m = m_init
+        while m <= m_max :
+            pass
+        
+        
