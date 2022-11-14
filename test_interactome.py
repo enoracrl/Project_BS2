@@ -37,7 +37,7 @@ class test_results(unittest.TestCase):
         self.file2 = Interactome("Human_HighQuality.txt")
 
     def test_instance(self):
-        "Tests if self.file is an object of Interactome and as been correctly initiated."
+        "Tests if self.file is an object of Interactome and has been correctly initiated."
         self.assertTrue(isinstance(self.file1, Interactome))
         print(f"test_instance file_1\033[92m passed \033[0m")
         self.assertTrue(isinstance(self.file2, Interactome))
