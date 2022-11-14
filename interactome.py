@@ -329,13 +329,74 @@ class Interactome :
         '''
         m_init = self.count_edges()
         sum_degrees = 0
-        for prot in self.read_interaction_file_mat()[0] :
+        prots = self.read_interaction_file_mat()[0]
+        for prot in prots :
             sum_degrees += self.get_degree(prot)
         if m_init < 2 or sum_degrees < 0 :
             raise ValueError
-        g = nx.Graph(self.get_int_list())
+        BA_graph = nx.Graph(self.get_int_list())
         m = m_init
+        nodes = list(range(m))
         while m <= m_max :
-            pass
+            deg = 0
+            BA_graph.add_node(nodes[-1])
+            prots.append(m)
+            nodes.append(m)
+            for prot in prots :
+                p = self.get_degree(prot)/sum_degrees
+                if np.random.binomial(1, p) == 1:
+                    BA_graph.add_edge(prot, prots[-1])
+                    deg += 1
+            sum_degrees += deg
+            m += 1
+        return BA_graph
         
-        
+    def ExistChemin(g, u, v):
+        n = nx.nodes(g)  # nombre de sommets dans le graphe
+        file = []
+        visites = [False] * n
+        # ajouter le premier sommet à la file d'attente
+        file.append(u)
+        while file:
+            # supprimer le sommet supérieur de la pile et marqué comme visité
+            courant = file.pop(0)
+            visites[courant] = True
+            # visiter les sommets adjacents
+            for i in range(n):
+                # s'il existe et qu'un bord entre u et i et
+                # le sommet i n'est pas encore visité
+                if g[courant][i] > 0 and visites[i] == False:
+                    # ajouter i à la file marqué comme visité
+                    file.append(i)
+                    visites[i] = True
+                # Si le sommet i est le sommet voulu (i = v)
+                # donc il existe un chemin de u à i(v)
+                elif g[courant][i] > 0 and i == v:
+                    return True
+        return False
+    
+    
+    
+    def count_CC(self, g) :
+        count_CC = 0
+        n = nx.nodes(g)
+        T = list(range(n))
+        for 
+        cnx = connex_components(mat)
+        res = {}
+        for i, c in enumerate(cnx):
+            if c not in res:
+                res[c] = []
+            count_CC += 1
+        return count_CC 
+    
+    def write_CC(self) :
+        pass
+    
+    def extract_CC(self, prot) :
+        pass
+    
+    def compute_CC(self) :
+        pass
+    
+    
