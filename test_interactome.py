@@ -33,8 +33,8 @@ class test_results(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         "Initiation of Class Interactome with our 2 tests files."
         super(test_results, self).__init__(*args, **kwargs)
-        self.file1 = Interactome("C:/Users/leabe/OneDrive/Bureau/BS2/TP_projet/toy_example.txt")
-        self.file2 = Interactome("C:/Users/leabe/OneDrive/Bureau/BS2/TP_projet/Human_HighQuality.txt")
+        self.file1 = Interactome("toy_example.txt")
+        self.file2 = Interactome("Human_HighQuality.txt")
 
     def test_instance(self):
         "Tests if self.file is an object of Interactome and as been correctly initiated."
