@@ -52,39 +52,44 @@ class test_results(unittest.TestCase):
 
     def test_int_list_is_a_list(self):
         "Tests if file.int_list is a list."
-        self.assertTrue(isinstance(self.file1.int_list, list))
+        self.assertTrue(isinstance(self.file1.get_int_list(), list))
         print(f"test_int_list_is_a_list file_1\033[92m passed \033[0m")
-        self.assertTrue(isinstance(self.file2.int_list, list))
+        self.assertTrue(isinstance(self.file2.get_int_list(), list))
         print(f"test_int_list_is_a_list file_2\033[92m passed \033[0m")
 
     def test_int_list(self):
         "Tests if it returns the right list for the first test file."
-        self.assertEqual(self.file1.int_list, [('A', 'B'), ('A', 'C'), ('B', 'C'), ('B', 'D'), ('D', 'E'), ('D', 'F')])
+        self.assertEqual(self.file1.get_int_list(), [('A', 'B'), ('A', 'C'), ('B', 'C'), ('B', 'D'), ('D', 'E'), ('D', 'F')])
         print(f"test_int_list file_1\033[92m passed \033[0m")
 
     def test_int_dict_is_a_dict(self):
         "Tests if file.int_dict is a dictionnary."
-        self.assertTrue(isinstance(self.file1.int_dict, dict))
+        self.assertTrue(isinstance(self.file1.get_int_dict(), dict))
         print(f"test_int_dict_is_a_dict file_1\033[92m passed \033[0m")
-        self.assertTrue(isinstance(self.file2.int_dict, dict))
+        self.assertTrue(isinstance(self.file2.get_int_dict(), dict))
         print(f"test_int_dict_is_a_dict file_2\033[92m passed \033[0m")
 
     def test_int_dict(self):
         "Tests if it returns the right dictionnary for the first test file."
-        self.assertEqual(self.file1.int_dict, {'A': ['B', 'C'], 'B': ['A', 'C', 'D'], 'C': ['A', 'B'], 'D': ['B', 'E', 'F'], 'E': ['D'], 'F': ['D']})
+        self.assertEqual(self.file1.get_int_dict(), {'A': ['B', 'C'], 'B': ['A', 'C', 'D'], 'C': ['A', 'B'], 'D': ['B', 'E', 'F'], 'E': ['D'], 'F': ['D']})
         print(f"test_int_dict file_1\033[92m passed \033[0m")
 
-    '''def test_mat_is_a_mat(self):
+    def test_mat_is_a_mat(self):
         "Tests if file.mat is a matrix"
-        self.assertTrue(isinstance(self.file1.get_mat, np.ndarray))
+        self.assertTrue(isinstance(self.file1.get_mat(), np.ndarray))
         print(f"test_int_list_is_a_list file_1\033[92m passed \033[0m")
-        self.assertTrue(isinstance(self.file2.get_mat, np.ndarray))
+        self.assertTrue(isinstance(self.file2.get_mat(), np.ndarray))
         print(f"test_int_list_is_a_list file_2\033[92m passed \033[0m")
- 
+    
     def test_mat(self):
         "Tests if it returns the right dictionnary for the first test file."
-        self.assertEqual(self.file1.get_mat, [[0, 1, 1, 0, 0, 0], [1, 0, 1, 1, 0, 0], [1, 1, 0, 0, 0, 0], [0, 1, 0, 0, 1, 1], [0, 0, 0, 1, 0, 0], [0, 0, 0, 1, 0, 0]])
-        print(f"test_mat file_1\033[92m passed \033[0m")'''
+        np.testing.assert_equal(self.file1.get_mat(), [[0,1,1,0,0,0],
+                                                       [1,0,1,1,0,0], 
+                                                       [1,1,0,0,0,0], 
+                                                       [0,1,0,0,1,1], 
+                                                       [0,0,0,1,0,0],
+                                                       [0,0,0,1,0,0]])
+        print(f"test_mat file_1\033[92m passed \033[0m")
 
     def test_is_interaction_file(self):
         "Tests if is_interaction_file returns True and not None with the right file."
