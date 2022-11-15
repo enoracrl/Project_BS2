@@ -176,16 +176,15 @@ class test_results(unittest.TestCase):
         self.assertRaises(ValueError, self.file1.count_degree, -10)
         print(f"test_count_degree error_file_1\033[92m passed \033[0m")
 
-    def test_histogram_degree(self):
+    @patch('builtins.print')
+    def test_histogram_degree(self, mock_print):
         "Tests if the function histogram_degree print the right thing and returns None."
-        capturedOutput = io.StringIO()
-        sys.stdout = capturedOutput
-        sys.stdout = sys.__stdout__
+        self.file1.histogram_degree(1, 1)
+        mock_print.assert_called_with('1','**', sep = ' ')
         self.assertIsNone(self.file1.histogram_degree(1, 2))
         print(f"test_histogram_degree file_1\033[92m passed \033[0m")
-        capturedOutput = io.StringIO()
-        sys.stdout = capturedOutput
-        sys.stdout = sys.__stdout__
+        self.file2.histogram_degree(9, 9)
+        mock_print.assert_called_with('9','*********************************************************************************************************************************************************************************************************************', sep = ' ')
         self.assertIsNone(self.file2.histogram_degree(9, 9))
         print(f"test_histogram_degree file_1\033[92m passed \033[0m")
 
