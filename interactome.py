@@ -350,30 +350,6 @@ class Interactome :
             sum_degrees += deg
             m += 1
         return BA_graph
-        
-    def ExistChemin(g, u, v):
-        n = nx.nodes(g)  # nombre de sommets dans le graphe
-        file = []
-        visites = [False] * n
-        # ajouter le premier sommet à la file d'attente
-        file.append(u)
-        while file:
-            # supprimer le sommet supérieur de la pile et marqué comme visité
-            courant = file.pop(0)
-            visites[courant] = True
-            # visiter les sommets adjacents
-            for i in range(n):
-                # s'il existe et qu'un bord entre u et i et
-                # le sommet i n'est pas encore visité
-                if g[courant][i] > 0 and visites[i] == False:
-                    # ajouter i à la file marqué comme visité
-                    file.append(i)
-                    visites[i] = True
-                # Si le sommet i est le sommet voulu (i = v)
-                # donc il existe un chemin de u à i(v)
-                elif g[courant][i] > 0 and i == v:
-                    return True
-        return False
     
     def find_CC(self) :
         'ok'
@@ -409,9 +385,12 @@ class Interactome :
                     end = '\n'
                 file_writer.write(str(len(self.find_CC()[i])) + '\t' + ' '.join(self.find_CC()[i]) + end)    
 
-    def extract_CC(self, prot) :
-        pass
-    
+    def extract_CC(self, prot:str) :
+        'ok'
+        for i in range(len(self.find_CC())) :
+            if prot in self.find_CC()[i] :
+                return self.find_CC()[i]
+            
     def compute_CC(self) :
         lcc = []
         return lcc
