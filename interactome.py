@@ -377,19 +377,25 @@ class Interactome :
     
     
     
-    def count_CC(self, g) :
-        count_CC = 0
+    def count_CC(self) :
+        # we define our graph with the list of interactions 
+        g = nx.Graph(self.get_int_list())
         n = nx.nodes(g)
-        T = list(range(n))
-        for 
-        cnx = connex_components(mat)
-        res = {}
-        for i, c in enumerate(cnx):
-            if c not in res:
-                res[c] = []
-            count_CC += 1
+        connected_nodes = []
+        for node in n :
+            node_added = False
+            for edges in g.edges(node) :
+                    for edge in edges :
+                        for i in range(len(connected_nodes)) :
+                            if edge in connected_nodes[i] :
+                                if node not in connected_nodes[i] :
+                                    connected_nodes[i].append(node)
+                                    node_added = True
+            if node_added == False :
+                connected_nodes.append([node])
+        count_CC = len(connected_nodes)
         return count_CC 
-    
+     
     def write_CC(self) :
         pass
     
@@ -397,6 +403,7 @@ class Interactome :
         pass
     
     def compute_CC(self) :
-        pass
+        lcc = []
+        return lcc
     
     
