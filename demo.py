@@ -6,6 +6,8 @@ Testing files
 
 file_test_1 = "toy_example.txt"         # simple file with only 6 interactions between letters
 file_test_2 = "Human_HighQuality.txt"   # complex file with 27276 interactions
+file_test_3 = "/Users/Enora/Downloads/ex.txt"
+file_test_4 = "/Users/Enora/Downloads/ex2.txt"
 
 false_file_1 = "false_file_example-1.txt"   # file without the number of interactions on the first line
 false_file_2 = "false_file_example-2.txt"   # empty file
@@ -15,6 +17,8 @@ false_file_4 = "false_file_example-4.txt"   # file with a wrong number of column
 file_to_clean = "toy_example_to_clean.txt"
 file_cleaned = "toy_example_cleaned.txt"
 
+file_CC = "toy_example_with_3_CC.txt"
+
 if __name__ == "__main__" :
     interactome1 = Interactome(file_test_1)   # objet de la classe Interactome
     interactome2 = Interactome(file_test_2)
@@ -22,6 +26,7 @@ if __name__ == "__main__" :
     false_interactome_2 = Interactome(false_file_2)
     false_interactome_3 = Interactome(false_file_3)
     interactome_to_clean = Interactome(file_to_clean)
+    interactome_CC = Interactome(file_CC)
     #false_interactome_4 = Interactome(false_file_4)
     print("List of interactions of toy_example : ", interactome1.get_int_list(), 
           "List of interactions of Human_HighQuality (beginning) :", interactome2.get_int_list()[:4], 
@@ -93,6 +98,15 @@ if __name__ == "__main__" :
     print("Local clustering coefficient of the protein A toy_example :", interactome1.clustering("A"), 
           "Local clustering coefficient of the protein 1433B_HUMAN of Human_HighQuality :", interactome2.clustering("1433B_HUMAN"), 
           sep="\n" )
+    print("test :", interactome_CC.find_CC())
+    print("test :", interactome_CC.count_CC())
+    print("test :", interactome_CC.write_CC())
+    print("test :", interactome_CC.extract_CC("A"))
+    print("test :", interactome_CC.extract_CC("D"))
+    print("test :", interactome_CC.extract_CC("H"))
+    print("test :", interactome_CC.compute_CC())
+    
+    
     
 
     
