@@ -375,10 +375,8 @@ class Interactome :
                     return True
         return False
     
-    
-    
-    def count_CC(self) :
-        # we define our graph with the list of interactions 
+    def find_CC(self) :
+        'ok'
         g = nx.Graph(self.get_int_list())
         n = nx.nodes(g)
         connected_nodes = []
@@ -393,12 +391,24 @@ class Interactome :
                                     node_added = True
             if node_added == False :
                 connected_nodes.append([node])
-        count_CC = len(connected_nodes)
+        return connected_nodes
+    
+    def count_CC(self) :
+        'ok'
+        # we define our graph with the list of interactions 
+        count_CC = len(self.find_CC())
         return count_CC 
      
     def write_CC(self) :
-        pass
-    
+        'ok'
+        with open("connected_components.txt", "w+", encoding="utf-8") as file_writer:
+            for i in range(self.count_CC()):
+                if i == self.count_CC() :
+                    end = ""
+                else :
+                    end = '\n'
+                file_writer.write(str(len(self.find_CC()[i])) + '\t' + ' '.join(self.find_CC()[i]) + end)    
+
     def extract_CC(self, prot) :
         pass
     
