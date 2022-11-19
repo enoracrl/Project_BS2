@@ -379,11 +379,7 @@ class Interactome :
         'ok'
         with open("connected_components.txt", "w+", encoding="utf-8") as file_writer:
             for i in range(self.count_CC()):
-                if i == self.count_CC() :
-                    end = ""
-                else :
-                    end = '\n'
-                file_writer.write(str(len(self.find_CC()[i])) + '\t' + ' '.join(self.find_CC()[i]) + end)    
+                file_writer.write(str(len(self.find_CC()[i])) + '\t' + ' '.join(self.find_CC()[i]) + '\n')    
 
     def extract_CC(self, prot:str) :
         'ok'
@@ -392,7 +388,9 @@ class Interactome :
                 return self.find_CC()[i]
             
     def compute_CC(self) :
+        'ok'
         lcc = []
+        for i in range(len(self.find_CC())) :
+            for _ in range(len(self.find_CC()[i])) :
+                lcc.append(i+1)
         return lcc
-    
-    
