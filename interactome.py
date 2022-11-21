@@ -269,9 +269,6 @@ class Interactome :
         Output :
             density : a float (number of edges in the interactome / maximal number of edges that the interactome
             could have)
-            
-        ok
-        0.4 --> toy_example
         '''
         max_edges = self.count_vertices()*(self.count_vertices()-1)/2   # n*(n-1)/2
         density = round(self.count_edges() / max_edges, 4)              # edges / max_edges
@@ -285,8 +282,6 @@ class Interactome :
         Output :
             coeff_clustering : a float (number of edges of the protein neighbors / maximal number of edges that it
             could have)
-            
-        C_A = 1/1 = 1 ; C_B = 1/3 ; C_C = 1/3 ; C_D = 0/3 = 0 ; C_E = 0/0 = 0 ; C_F = 0/0 = 0
         '''
         max_degree_prot = self.get_degree(prot)*(self.get_degree(prot)-1)/2
         list_prot = [prot]
@@ -352,7 +347,11 @@ class Interactome :
         return BA_graph
     
     def find_CC(self) :
-        'ok'
+        '''
+        Return all connected nodes.
+        Output :
+            connected_nodes : a list (of all nodes that are connected)
+        '''
         g = nx.Graph(self.get_int_list())
         n = nx.nodes(g)
         connected_nodes = []
@@ -370,25 +369,46 @@ class Interactome :
         return connected_nodes
     
     def count_CC(self) :
-        'ok'
+        '''
+        Return the count of connected components.
+        Output :
+            count_CC : an int (the integer that correpond to every connected components)
+        '''
         # we define our graph with the list of interactions 
         count_CC = len(self.find_CC())
         return count_CC 
      
     def write_CC(self) :
-        'ok'
+        '''
+        Return an output file that contains the different connected components.
+        Output :
+            connected_components.txt : a tabulate file with 
+            - one lign by connected components
+            - the lenght of it is the first element of the line
+            - the list of all vertices that composes the connected component.
+        '''
         with open("connected_components.txt", "w+", encoding="utf-8") as file_writer:
             for i in range(self.count_CC()):
                 file_writer.write(str(len(self.find_CC()[i])) + '\t' + ' '.join(self.find_CC()[i]) + '\n')    
 
     def extract_CC(self, prot:str) :
-        'ok'
+        '''
+        Return all the vertices of the connected component for the protein.
+        Args :
+            prot : vertice we want to know the connected component
+        Output :
+            self.find_CC : a list (vertices of the connected component for the protein)
+        '''
         for i in range(len(self.find_CC())) :
             if prot in self.find_CC()[i] :
                 return self.find_CC()[i]
             
     def compute_CC(self) :
-        'ok'
+        '''
+        Return for every protein in the connected component, the number of connected components it is involved in.
+        Output :
+            lcc : a list (number of connected components for every vertices of the connected component)
+        '''
         lcc = []
         for i in range(len(self.find_CC())) :
             for _ in range(len(self.find_CC()[i])) :
