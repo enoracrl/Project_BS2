@@ -220,6 +220,50 @@ class test_results(unittest.TestCase):
         self.assertTrue(nx.is_isomorphic(G1, G1, edge_match = em))
         print(f"test_graph_ER file_1\033[92m passed \033[0m")
         
+    '''def test_graph_BA(self):
+        "Tests if the function graph_BA return correct graphs, not None and raise the right ValueError."
+        self.assertIsNotNone(self.file1.graph_BA(2))
+        #self.assertRaises(ValueError, self.file1.graph_BA(1))
+        G1 = self.file1.graph_BA(2)
+        G2 = self.file1.graph_BA(4)
+        G3 = self.file1.graph_BA(2)
+        nx.add_path(G1, [1,2,3,4], weight = 1)
+        nx.add_path(G2, [10,20,30,40], weight = 2)
+        nx.add_path(G3, [1,2,3,4], weight = 1)
+        em = iso.numerical_edge_match('weight', 1)
+        self.assertFalse(nx.is_isomorphic(G1, G2))
+        self.assertTrue(nx.is_isomorphic(G1, G1, edge_match = em))
+        print(f"test_graph_BA file_1\033[92m passed \033[0m")'''
+
+    def test_find_CC(self):
+        "Tests if the function find_CC return the right list and not None."
+        self.assertEqual(self.file1.find_CC(), [['A', 'B', 'C', 'D', 'E', 'F']])
+        self.assertIsNotNone(self.file1.find_CC())
+        print(f"test_find_CC file_1\033[92m passed \033[0m")
+
+    def test_count_CC(self):
+        "Tests if the function count_CC return the right int and not None."
+        self.assertEqual(self.file1.count_CC(), 1)
+        self.assertIsNotNone(self.file1.count_CC())
+        print(f"test_count_CC file_1\033[92m passed \033[0m")
+
+    def test_write_CC(self):
+        "Tests if the function write_CC return None."
+        self.assertIsNone(self.file1.write_CC())
+        print(f"test_write_CC file_1\033[92m passed \033[0m")
+
+    def test_extract_CC(self):
+        "Tests if the function extract_CC return the right list and not None."
+        self.assertEqual(self.file1.extract_CC("A"), ['A', 'B', 'C', 'D', 'E', 'F'])
+        self.assertIsNotNone(self.file1.extract_CC("A"))
+        print(f"test_extract_CC file_1\033[92m passed \033[0m")
+
+    def test_compute_CC(self):
+        "Tests if the function extract_CC return the right list and not None."
+        self.assertEqual(self.file1.compute_CC(), [1, 1, 1, 1, 1, 1])
+        self.assertIsNotNone(self.file1.compute_CC())
+        print(f"test_compute_CC file_1\033[92m passed \033[0m")
+        
 
 if __name__ == '__main__':
     unittest.main()
