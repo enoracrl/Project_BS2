@@ -1,6 +1,6 @@
 """Object interactome which allows to manipulate graphs, and to introduce into these graphs a notion of interaction between protein domains
 
-Usage:
+Usage: Visualisation and manipulation of graphs
 
 ======
 python nom_de_ce_super_script.py argument1 argument2
@@ -301,10 +301,13 @@ class Interactome :
     
     def graph_ER(self, p:float) :
         '''
-         GENERATING ERDÖS-RÉNYI RANDOM GRAPHS G(n, p) where n = number of vertices, and p = probabilty of
-         a vertice to be present
-         GENERATING ERDÖS-RÉNYI RANDOM GRAPHS G(n, p) where n = number of vertices, and p = probability of having vertices
-         P(k)=ck^y
+        Generating Erdös-Rényi random graphs G(n, p) where n is the number of vertices, and p is the probability of
+        a edge to be present.
+        Args :
+            p : a probability of a edge to be present 
+        Output :
+            g : a random graph with n nodes and m vertices
+        
          '''
         n = self.count_edges()
         #m = n*(n-1)/2
@@ -319,16 +322,23 @@ class Interactome :
 
     def graph_BA(self, m_max) :
         '''
-        GENERATING BARABASI RANDOM GRAPHS 
-        p(a_si = 1) = k_i / Sum(k_j)
+        Generating Barabasi-Alfred random graph, with m_0 edges in initialization which will be increased to m_max edges at the end. The probability
+        that a new edge (s) is connected with an pre-existing edge (i) is given by this formula :
+                            p(a_si = 1) = k_i / Sum(k_j)
+                        where k_i is the degree of the edge i
+        Args :
+            n_max : number of 
+        Output :
+            
         '''
         m_init = self.count_edges()
         sum_degrees = 0
+        # we define a list "prots" as the list of proteins in our graph
         prots = self.read_interaction_file_mat()[0]
         for prot in prots :
             sum_degrees += self.get_degree(prot)
         if m_init < 2 or sum_degrees < 0 :
-            raise ValueError
+            raise ValueError()
         BA_graph = nx.Graph(self.get_int_list())
         m = m_init
         nodes = list(range(m))
@@ -337,10 +347,12 @@ class Interactome :
             BA_graph.add_node(nodes[-1])
             prots.append(m)
             nodes.append(m)
+            self.int_dict[m] = []
             for prot in prots :
                 p = self.get_degree(prot)/sum_degrees
                 if np.random.binomial(1, p) == 1:
                     BA_graph.add_edge(prot, prots[-1])
+                    self.int_dict[m] = [prots[-1]]
                     deg += 1
             sum_degrees += deg
             m += 1
@@ -393,9 +405,9 @@ class Interactome :
 
     def extract_CC(self, prot:str) :
         '''
-        Return all the vertices of the connected component for the protein.
+        Return all the vertices of the connected component for the protein given in input.
         Args :
-            prot : vertice we want to know the connected component
+            prot : vertice we want to know the connected component which it belongs
         Output :
             self.find_CC : a list (vertices of the connected component for the protein)
         '''
