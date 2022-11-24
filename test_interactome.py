@@ -26,6 +26,7 @@ false_file_1 = "false_file_example-1.txt"   # a file without the number of inter
 false_file_2 = "false_file_example-2.txt"   # an empty file  
 false_file_3 = "false_file_example-3.txt"   # a file with a number of lines =/= number of interactions
 false_file_4 = "false_file_example-4.txt"   # a file with a wrong number of columns
+test_clean_interactome = "toy_example_cleaned.txt"
 
 
 class test_results(unittest.TestCase):
@@ -135,6 +136,11 @@ class test_results(unittest.TestCase):
         self.assertEqual(self.file2.count_edges(), 27276)
         self.assertIsNotNone(self.file2.count_edges())
         print(f"test_count_edges file_2\033[92m passed \033[0m")
+        
+    def test_clean_interactome(self):
+        "Tests if the function clean_interactome write the right file."
+        self.assertIsNone(self.file1.clean_interactome(test_clean_interactome))
+        print(f"test_clean_interactome file_1\033[92m passed \033[0m")
 
     def test_get_degree(self):
         "Tests if the function get_degree return the right number and not None and raise an ValueError."
