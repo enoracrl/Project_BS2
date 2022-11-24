@@ -17,6 +17,8 @@ import itertools
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
+import threading
+from threading import Thread
 
 class Interactome :
     '''
@@ -137,7 +139,7 @@ class Interactome :
     def count_vertices(self) :
         '''
         Return the number of vertices by counting the numbers of keys of the
-        interaction dictionnary (= the number of vertices)
+        interaction dictionnary (= the number of vertices).
 
         Output :
             number_of_vertices : an int (number of vertices)
@@ -177,7 +179,7 @@ class Interactome :
             for j in reversed(clean_text):
                 if i ==tuple(reversed(j)) :
                     clean_text.remove(j)
-        # we modify the initial number of interactions by the newest value : ok
+        # we modify the initial number of interactions by the newest value
         clean_text.insert(0,str(len(clean_text)))
         # we write into a new tabulated file the modifications
         with open(fileout, "w+", encoding="utf-8") as file_writer:
@@ -283,6 +285,7 @@ class Interactome :
             coeff_clustering : a float (number of edges of the protein neighbors / maximal number of edges that it
             could have)
         '''
+        # maximum degree of the neighbours of the protein prot
         max_degree_prot = self.get_degree(prot)*(self.get_degree(prot)-1)/2
         list_prot = [prot]
         if max_degree_prot == 0:
@@ -331,32 +334,31 @@ class Interactome :
         Output :
             
         '''
-        m_init = self.count_edges()
-        sum_degrees = 0
-        # we define a list "prots" as the list of proteins in our graph
+        m_init = self.count_vertices()
         prots = self.read_interaction_file_mat()[0]
+        sum_degrees = 0
         for prot in prots :
             sum_degrees += self.get_degree(prot)
         if m_init < 2 or sum_degrees < 0 :
-            raise ValueError()
-        BA_graph = nx.Graph(self.get_int_list())
+            raise ValueError
+        g = nx.Graph(self.get_int_list())
         m = m_init
         nodes = list(range(m))
-        while m <= m_max :
+        while m < m_max :
             deg = 0
-            BA_graph.add_node(nodes[-1])
             prots.append(m)
             nodes.append(m)
+            g.add_node(nodes[-1])
             self.int_dict[m] = []
             for prot in prots :
                 p = self.get_degree(prot)/sum_degrees
                 if np.random.binomial(1, p) == 1:
-                    BA_graph.add_edge(prot, prots[-1])
+                    g.add_edge(prot, prots[-1])
                     self.int_dict[m] = [prots[-1]]
                     deg += 1
             sum_degrees += deg
             m += 1
-        return BA_graph
+        return g
     
     def find_CC(self) :
         '''
@@ -426,3 +428,9 @@ class Interactome :
             for _ in range(len(self.find_CC()[i])) :
                 lcc.append(i+1)
         return lcc
+
+
+            
+            
+
+            
