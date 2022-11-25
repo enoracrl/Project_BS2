@@ -10,9 +10,9 @@
 This project is dedicated to the study of graphs of interactions between proteins, by writting tools to manipulate these graphs, and to introduce into these graphs a notion of interaction between protein domains. We can use this code to also work with graph visualization with some additional modules such as matplotlib and networkx.
 
 
-![alt text](https://github.com/enoracrl/Project_BS2/blob/ad7e867e07980f579b3b512e7c86ef483c7507a3/barabasi-albert_graph.png)
+<img src="https://github.com/enoracrl/Project_BS2/blob/ad7e867e07980f579b3b512e7c86ef483c7507a3/barabasi-albert_graph.png" height="300px"/>
 
-![alt text](https://github.com/enoracrl/Project_BS2/blob/efd063e27c90e9a6af51ae892363fc335a654ede/erdos-renyi_graph.png)
+<img src="https://github.com/enoracrl/Project_BS2/blob/efd063e27c90e9a6af51ae892363fc335a654ede/erdos-renyi_graph.png" height="300px"/>
 
 ## Lauch
 
