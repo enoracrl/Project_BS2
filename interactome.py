@@ -14,7 +14,7 @@ Importation of necessary modules :
     - numpy : used to create matrix
     - itertools : allows to implement a various number of iterators
     - os : allows to manipulate files
-    - argparse : 
+    - argparse : makes it easy to write user-friendly command-line interfaces
 '''
 
 import itertools
