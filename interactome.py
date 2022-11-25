@@ -340,8 +340,6 @@ class Interactome :
                     self.get_int_dict()[m] = [nodes[-1]] 
                     deg += 1
                 sum_degrees += deg
-            if connected == False : # if a node is not connected to any others nodes
-                g.append(tuple(str(m)))
             m +=1
         
         return g
@@ -359,10 +357,10 @@ class Interactome :
                 for i in range(len(cc)) :
                     if edge in cc[i] :
                         if node not in cc[i] :
-                            cc[i].append(node)
+                            cc[i].append(str(node))
                             node_added = True
             if node_added == False :
-                cc.append([node])
+                cc.append([str(node)])
         return cc
     
     def count_CC(self) -> int:
@@ -387,6 +385,7 @@ class Interactome :
         with open(file_CC, "w+", encoding="utf-8") as file_writer:
             for i in range(self.count_CC()):
                 file_writer.write(str(len(self.find_CC()[i])) + '\t' + ' '.join(self.find_CC()[i]) + '\n')
+            
     
     def extract_CC(self, prot:str) -> list :
         '''
@@ -411,7 +410,3 @@ class Interactome :
             for _ in range(len(self.find_CC()[i])) :
                 lcc.append(i+1)
         return lcc
-   
-            
-
-            
