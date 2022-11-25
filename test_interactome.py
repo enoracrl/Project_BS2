@@ -13,10 +13,7 @@ Importation of necessary modules
 from interactome import *
 import numpy as np
 import unittest
-import networkx.algorithms.isomorphism as iso
-#import mock
 from mock import patch, MagicMock
-#from spike import T1, bar
 
 '''
 Testing files
@@ -96,6 +93,13 @@ class test_results(unittest.TestCase):
                                                        [0,0,0,1,0,0],
                                                        [0,0,0,1,0,0]])
         print(f"test_mat file_1\033[92m passed \033[0m")
+        
+    def test_clean_interactome(self):
+        "Tests if the function clean_interactome write the right file."
+        with open("test_clean_interactome", "r", encoding="utf-8") as file_reader:
+            text = file_reader.read()
+            self.assertEqual(text, "6\nA\tB\nA\tC\nB\tC\nB\tD\nD\tE\nD\tF\n")
+        print(f"test_clean_interactome file_1\033[92m passed \033[0m")
 
     def test_count_vertices(self):
         "Tests if the function count_vertices return the right number and not None."
@@ -114,12 +118,7 @@ class test_results(unittest.TestCase):
         self.assertEqual(self.file2.count_edges(), 27276)
         self.assertIsNotNone(self.file2.count_edges())
         print(f"test_count_edges file_2\033[92m passed \033[0m")
-        
-    '''def test_clean_interactome(self):
-        "Tests if the constructor write the right file."
-        self.assertIsNone(self.file1("cleaned_toy_example_to_clean.txt"))
-        print(f"test_clean_interactome file_1\033[92m passed \033[0m")
-    '''
+       
     def test_get_degree(self):
         "Tests if the function get_degree return the right number and not None and raise an ValueError."
         self.assertEqual(self.file1.get_degree("A"), 2)
@@ -191,33 +190,16 @@ class test_results(unittest.TestCase):
         print(f"test_clustering file_2\033[92m passed \033[0m")
 
     def test_graph_ER(self):
-        "Tests if the function graph_ER return correct graphs and not None."
-        self.assertIsNotNone(self.file1.graph_ER(0.81))
-        G1 = self.file1.graph_ER(0.81)
-        G2 = self.file1.graph_ER(1)
-        G3 = self.file1.graph_ER(0.81)
-        nx.add_path(G1, [1,2,3,4], weight = 1)
-        nx.add_path(G2, [10,20,30,40], weight = 2)
-        nx.add_path(G3, [1,2,3,4], weight = 1)
-        em = iso.numerical_edge_match('weight', 1)
-        self.assertFalse(nx.is_isomorphic(G1, G2))
-        self.assertTrue(nx.is_isomorphic(G1, G1, edge_match = em))
+        "Tests if the function graph_ER return correct list and not None."
+        self.assertIsNotNone(self.file1.graph_ER(0.3))
+        self.assertTrue(isinstance(self.file1.graph_ER(0.3), list))
         print(f"test_graph_ER file_1\033[92m passed \033[0m")
         
-    '''def test_graph_BA(self):
-        "Tests if the function graph_BA return correct graphs, not None and raise the right ValueError."
-        self.assertIsNotNone(self.file1.graph_BA(2))
-        #self.assertRaises(ValueError, self.file1.graph_BA(1))
-        G1 = self.file1.graph_BA(2)
-        G2 = self.file1.graph_BA(4)
-        G3 = self.file1.graph_BA(2)
-        nx.add_path(G1, [1,2,3,4], weight = 1)
-        nx.add_path(G2, [10,20,30,40], weight = 2)
-        nx.add_path(G3, [1,2,3,4], weight = 1)
-        em = iso.numerical_edge_match('weight', 1)
-        self.assertFalse(nx.is_isomorphic(G1, G2))
-        self.assertTrue(nx.is_isomorphic(G1, G1, edge_match = em))
-        print(f"test_graph_BA file_1\033[92m passed \033[0m")'''
+    def test_graph_BA(self):
+        "Tests if the function graph_BA return correct list and not None."
+        self.assertIsNotNone(self.file1.graph_BA(10))
+        self.assertTrue(isinstance(self.file1.graph_BA(10), list))
+        print(f"test_graph_BA file_1\033[92m passed \033[0m")
 
     def test_find_CC(self):
         "Tests if the function find_CC return the right list and not None."
