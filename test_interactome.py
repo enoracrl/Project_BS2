@@ -7,7 +7,12 @@ __contact__ = ("enora.corler@etudiant.univ-rennes1.fr", "lea.beaulieu@etudiant.u
 __date__ = "25/11/2022"
 
 '''
-Importation of necessary modules
+Importation of necessary modules :
+    - numpy : used to test matrix 
+    - unittest : used for all the tests
+    - interactome : the file we need to test all functions
+    - unittest.mock : allows to substitutes and imitates a real object (used to tests print output)
+    - patch : means that the mock object is going to take the place of our object
 '''
 
 from interactome import *
