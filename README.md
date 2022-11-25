@@ -16,15 +16,15 @@ Scripts :
 * **tp.py** : python file containing the main functions
 * **test.py** : python file containing tests for our functions
 
-Additional files : 
-* **semaine_12.pdf** : PDF file of the TP
-* **Human_HighQuality.txt** : a test file containing interactions (more complex : 27276 interactions)
-* **toy_example.txt** : a test file containing interactions (simpler : only 6 interactions)
-* **false_file_example-1.txt** to **false_file_example-4.txt** : files based on the *toy_example.txt* file which are not correctly written (empty file, wrong numbers of line/interactions/columns)
-* **toy_example_to_clean.txt** : example file with homo-dimers and repetitions which is used in input to generate a cleaned file in output
-* **interaction_graph.png** : schematic figure based on the interactions of the *toy_example.txt* file
+Additional files are put in ./Examples :
+**Human_HighQuality.txt** : a test file containing interactions (more complex : 27276 interactions) ;
+* **toy_example.txt** : a test file containing interactions (simpler : only 6 interactions) ;
+* **false_file_example-1.txt** to **false_file_example-4.txt** : files based on the *toy_example.txt* file which are not correctly written (empty file, wrong numbers of line/interactions/columns) ;
+* **toy_example_to_clean.txt** : example file with homo-dimers and repetitions which is used in input to generate a cleaned file in output ;
+* **toy_example_with_3_CC.txt** : example file based on toy_example.txt with 3 componected components.
 
 ## Credits 
 
 * *Protein-protein interaction networks and graph theory* - **E. BECKER** (Bioinformatic master's degree courses)
 * *Python 3.10.7 documentation* - https://docs.python.org/3/
+* *Cours de Python* - **Patrick Fuchs and Pierre Poulain**
