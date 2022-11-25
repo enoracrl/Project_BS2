@@ -12,15 +12,15 @@ This project is dedicated to the study of graphs of interactions between protein
 
 ![alt text](https://github.com/enoracrl/Project_BS2/blob/ad7e867e07980f579b3b512e7c86ef483c7507a3/barabasi-albert_graph.png)
 
-![alt text](https://github.com/enoracrl/Projecyt_BS2/testing/erdos-renyi_graph.png?raw=true)
+![alt text](https://github.com/enoracrl/Project_BS2/blob/efd063e27c90e9a6af51ae892363fc335a654ede/erdos-renyi_graph.png)
 
 ## Lauch
 
 {% filename %}python interactome.py [-h] [-fo FILE_OUT] [-d D] [-min DMIN] [-max DMAX] [-p P] [-m M_MAX] filename protein degree{% endfilename %}
 
-`positional arguments:
-  filename              name of input graph of interaction file
-  protein               name of the protein you want to study locally
+`positional arguments: '\n'
+  filename              name of input graph of interaction file '\n'
+  protein               name of the protein you want to study locally '\n'
   degree                degree that others proteins have too
 
 optional arguments:
@@ -39,11 +39,11 @@ You can test this program on some examples files that are in the *Examples/* fol
 
 Make sure that you interaction file is readable (.txt format for example), not empty, with a couple of interactions per line separated by a tabulation or a space like that :
 
-`6
-A B
-A C
-B D
-D E
+`6 '\n'
+A B'\n'
+A C'\n'
+B D'\n'
+D E'\n'
 D F `
 
 Don't worry if you forgot to put the number of interactions of your graph (first line) or you put interactions twice or homo-dimers : our programm will clean your file !
