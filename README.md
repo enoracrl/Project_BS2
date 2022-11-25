@@ -16,8 +16,10 @@ This project is dedicated to the study of graphs of interactions between protein
 
 ## Lauch
 
-{% filename %}python interactome.py [-h] [-fo FILE_OUT] [-d D] [-min DMIN] [-max DMAX] [-p P] [-m M_MAX] filename protein degree{% endfilename %}
+`python interactome.py [-h] [-fo FILE_OUT] [-d D] [-min DMIN] [-max DMAX] [-p P] [-m M_MAX] filename protein degree`
 
+
+```
 positional arguments:
   filename              name of input graph of interaction file 
   protein               name of the protein you want to study locally
@@ -34,17 +36,20 @@ optional arguments:
                         Erdös-Renyi
   -m M_MAX, --maximal_degree M_MAX
                         number of maximum nodes for the Barabasi-Albert graph
+```
 
 You can test this program on some examples files that are in the *Examples/* folder, but you can also provides your own !
 
 Make sure that you interaction file is readable (.txt format for example), not empty, with a couple of interactions per line separated by a tabulation or a space like that :
 
+```
 6
 A B
 A C
 B D
 D E
 D F
+```
 
 Don't worry if you forgot to put the number of interactions of your graph (first line) or you put interactions twice or homo-dimers : our programm will clean your file !
 
