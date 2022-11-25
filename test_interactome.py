@@ -4,28 +4,33 @@ Testing functions for the interactome.py file
 
 __authors__ = ("Enora CORLER", "Léa BEAULIEU")
 __contact__ = ("enora.corler@etudiant.univ-rennes1.fr", "lea.beaulieu@etudiant.univ-rennes1.fr")
-__date__ = "17/10/2022"
+__date__ = "25/11/2022"
 
 '''
 Importation of necessary modules
 '''
 
+from interactome import *
 import numpy as np
 import unittest
-import io
-import sys
-from interactome import *
 import networkx.algorithms.isomorphism as iso
+#import mock
+from mock import patch, MagicMock
+#from spike import T1, bar
 
 '''
 Testing files
 '''
 
+file_1 = "Examples/toy_example.txt"
+file_2 = "Examples/Human_HighQuality.txt"
+file_3 = "Examples/toy_example_with_3_CC.txt"
 
-false_file_1 = "false_file_example-1.txt"   # a file without the number of interactions on the first line
-false_file_2 = "false_file_example-2.txt"   # an empty file  
-false_file_3 = "false_file_example-3.txt"   # a file with a number of lines =/= number of interactions
-false_file_4 = "false_file_example-4.txt"   # a file with a wrong number of columns
+false_file_1 = "Examples/false_file_example-1.txt"   # a file without the number of interactions on the first line
+false_file_2 = "Examples/false_file_example-2.txt"   # an empty file  
+false_file_3 = "Examples/false_file_example-3.txt"   # a file with a number of lines =/= number of interactions
+false_file_4 = "Examples/false_file_example-4.txt"   # a file with a wrong number of columns
+
 test_clean_interactome = "toy_example_cleaned.txt"
 
 
@@ -34,8 +39,8 @@ class test_results(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         "Initiation of Class Interactome with our 2 tests files."
         super(test_results, self).__init__(*args, **kwargs)
-        self.file1 = Interactome("toy_example.txt")
-        self.file2 = Interactome("Human_HighQuality.txt")
+        self.file1 = Interactome(file_1)
+        self.file2 = Interactome(file_2)
 
     def test_instance(self):
         "Tests if self.file is an object of Interactome and has been correctly initiated."
@@ -92,33 +97,6 @@ class test_results(unittest.TestCase):
                                                        [0,0,0,1,0,0]])
         print(f"test_mat file_1\033[92m passed \033[0m")
 
-    def test_is_interaction_file(self):
-        "Tests if is_interaction_file returns True and not None with the right file."
-        self.assertTrue(self.file1.is_interaction_file())
-        self.assertIsNotNone(self.file1.is_interaction_file())
-        print(f"test_is_interaction_file file_1\033[92m passed \033[0m")
-        self.assertTrue(self.file2.is_interaction_file())
-        self.assertIsNotNone(self.file2.is_interaction_file())
-        print(f"test_is_interaction_file file_2\033[92m passed \033[0m")
-
-    def test_is_not_interaction_file(self):
-        "Tests if is_interaction_file returns False and not None when the file contains an error."
-        false_file1 = Interactome(false_file_1)
-        false_file1.__init__(false_file_1)
-        self.assertFalse(false_file1.is_interaction_file())
-        self.assertIsNotNone(false_file1.is_interaction_file())
-        print(f"test_is_not_interaction_file false_file_1\033[92m passed \033[0m")
-        false_file2 = Interactome(false_file_2)
-        false_file2.__init__(false_file_2)
-        self.assertFalse(false_file2.is_interaction_file())
-        self.assertIsNotNone(false_file2.is_interaction_file())
-        print(f"test_is_not_interaction_file false_file_2\033[92m passed \033[0m")
-        false_file3 = Interactome(false_file_3)
-        false_file3.__init__(false_file_3)
-        self.assertFalse(false_file3.is_interaction_file())
-        self.assertIsNotNone(false_file3.is_interaction_file())
-        print(f"test_is_not_interaction_file falsefile_3\033[92m passed \033[0m")
-       
     def test_count_vertices(self):
         "Tests if the function count_vertices return the right number and not None."
         self.assertEqual(self.file1.count_vertices(), 6)
@@ -137,11 +115,11 @@ class test_results(unittest.TestCase):
         self.assertIsNotNone(self.file2.count_edges())
         print(f"test_count_edges file_2\033[92m passed \033[0m")
         
-    def test_clean_interactome(self):
-        "Tests if the function clean_interactome write the right file."
-        self.assertIsNone(self.file1.clean_interactome(test_clean_interactome))
+    '''def test_clean_interactome(self):
+        "Tests if the constructor write the right file."
+        self.assertIsNone(self.file1("cleaned_toy_example_to_clean.txt"))
         print(f"test_clean_interactome file_1\033[92m passed \033[0m")
-
+    '''
     def test_get_degree(self):
         "Tests if the function get_degree return the right number and not None and raise an ValueError."
         self.assertEqual(self.file1.get_degree("A"), 2)

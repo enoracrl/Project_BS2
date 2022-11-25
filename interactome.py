@@ -1,24 +1,17 @@
 """Object interactome which allows to manipulate graphs, and to introduce into these graphs a notion of interaction between protein domains
 
-Usage: Visualisation and manipulation of graphs
+Usage: Visualization and manipulation of graphs
 
-======
-python nom_de_ce_super_script.py argument1 argument2
-
-argument1: un entier signifiant un truc
-argument2: une chaîne de caractères décrivant un bidule
 """
 
 __authors__ = ("Enora CORLER", "Léa BEAULIEU")
 __contact__ = ("enora.corler@etudiant.univ-rennes1.fr", "lea.beaulieu@etudiant.univ-rennes1.fr")
-__date__ = "05/10/2022"
+__date__ = "25/11/2022"
 
 import itertools
 import numpy as np
-import networkx as nx
-import matplotlib.pyplot as plt
-import threading
-from threading import Thread
+import os
+from os.path import basename
 
 class Interactome :
     '''
@@ -28,23 +21,33 @@ class Interactome :
         We read the file for a reasonable number of times to construct the object,
         and then manipulate the data structure as we want
     '''
-    def __init__(self, file=None) :
+    def __init__(self, file=None, fileout=None) :
         '''
-        Construct all the necessary attributes for the interactome object.
-
+        Construct all the necessary attributes for the interactome object. We also verify if our file is correctly formarted ; 
+            if not, we clean it.
         Args :
             a tabulate file, .txt format
-
+            a name of an output file, .txt format
         Attributes :
             int_list : the list of all interactions
             int_dic : a dictionnary that regroups all the interactions
             self.matrix : the adjacency matrix of the interactions
-
         Parameters :
             int_list : the list of all interactions
             int_dic : a dictionnary that regroups all the interactions
             self.matrix : the adjacency matrix of the interaction
+            
+        Output :
+            fileout : a tabulate file based on the input file, cleaned from
+                all repetitions/homo-dimers ;
+            CC_of_[file].txt : a tabulate file with :
+                    - one lign by connected component ;
+                    - the lenght of it is the first element of the line ;
+                    - the list of all vertices that composes the connected component.
         '''
+        if file == None :
+            raise ValueError("Please put your graph of interactions in input as a file !")
+        fileName, fileExtension = os.path.splitext(file)
         self.file = file
         self.matrix = []
         int_dict = {}
@@ -56,36 +59,64 @@ class Interactome :
             if text != [] :
                 number_interactions = text[0][0]
                 for line in text[1:] :
-                    int_list.append(tuple(line))
-                    #if len(int_list) % 2 == 0:
-                    int1, int2 = line
-                    if int1 not in int_dict :
-                        int_dict[int1] = [int2]
-                    else :
-                        int_dict[int1].append(int2)
-                    if int2 not in int_dict :
-                        int_dict[int2] = [int1]
-                    else :
-                        int_dict[int2].append(int1)
-        self.text = text[1:]
-        self.number_interactions = number_interactions
+                    # removing lines with a number of cols > 2
+                    if len(line) % 2 == 0:
+                        int_list.append(tuple(line))
+                        int1, int2 = line
+                        if int1 not in int_dict :
+                            int_dict[int1] = [int2]
+                        else :
+                            int_dict[int1].append(int2)
+                        if int2 not in int_dict :
+                            int_dict[int2] = [int1]
+                        else :
+                            int_dict[int2].append(int1)
+        # verifying if the interactome is clean
+        count = sum([len(elem) for elem in text[1:]])
+        cleaned = False
+        if number_interactions.isnumeric() is True :
+            if len(text[1:]) == int(number_interactions) and count % 2 == 0 :
+                # if the file is not empty, with a correct number of interactions/lines/columns
+                cleaned = True
+        if cleaned == False :
+            # cleaning interactome
+            for i in range(1, len(int_list)-1):
+                if int_list[i][0] == int_list[i][1]: 
+                    del int_list[i]  # removing homo-dimers
+            clean_text = list(l for l, _ in itertools.groupby(int_list))
+            for i in clean_text:
+                for j in reversed(clean_text):
+                    if i == tuple(reversed(j)) :
+                        clean_text.remove(j)  # removing duplicates
+            # modifying initial number of interactions by the newest value
+            clean_text.insert(0,str(len(clean_text)))
+            # we write into a new tabulated file the modifications
+            if fileout == None :
+                fileout = fileName+"_cleaned"+fileExtension
+            with open(fileout, "w+", encoding="utf-8") as file_writer:
+                file_writer.write(clean_text[0]+"\n")
+                for i in clean_text[1:]:
+                    file_writer.write(str(i[0]) + "\t" + str(i[1])+"\n")
+            cleaned = True
         self.int_list = int_list
         self.int_dict = int_dict
-
+        self.fileName = fileName
+        self.fileExtension = fileExtension
+        
     # ACCESSEURS
-    def get_int_list(self) :
+    def get_int_list(self) -> list :
         '''
         Return the instance variable of the list of interactions.
         '''
         return self.int_list
 
-    def get_int_dict(self) :
+    def get_int_dict(self) -> dict :
         '''
         Return the instance variable of the dictionnary of interactions.
         '''
         return self.int_dict
 
-    def get_mat(self) :
+    def get_mat(self) -> np.ndarray :
         '''
         Return the instance variable of the matrix of interactions
         '''
@@ -93,22 +124,8 @@ class Interactome :
         return self.matrix
 
     # METHODS OF THE CLASS
-    def is_interaction_file(self) :
-        '''
-        Return a boolean that return True if all conditions (correct file format) are True and
-        return False (wrong file format) if one of them is False for a specific file given.
 
-        Output :
-            True : if the file is not empty, with a correct number of interactions/lines/columns
-            False : if at least one of the condition above is not respected
-        '''
-        count = sum([len(elem) for elem in self.text[1:]])
-        if self.number_interactions.isnumeric() is True :
-            if len(self.text) == int(self.number_interactions) and count % 2 == 0 :
-                return True
-        return False
-
-    def read_interaction_file_mat(self) :
+    def read_interaction_file_mat(self) -> tuple :
         '''
         Return an adjacency matrix that show 1 every time there is an interaction between
         two vertices. Also return a list that contains all vertices in the order of the matrix.
@@ -124,7 +141,7 @@ class Interactome :
                 matrix[proteins.index(key), proteins.index(value)] = 1
         return proteins, matrix
 
-    def read_interaction_file(self) :
+    def read_interaction_file(self) -> tuple :
         '''
         Return a triplet, the first element is the interaction dictionnary, the second
         one is the interaction list, the third one the matrix, and the last one is the 
@@ -136,7 +153,7 @@ class Interactome :
         return (self.get_int_dict(), self.get_int_list(), self.read_interaction_file_mat()[0],
                 self.get_mat())
 
-    def count_vertices(self) :
+    def count_vertices(self) -> int :
         '''
         Return the number of vertices by counting the numbers of keys of the
         interaction dictionnary (= the number of vertices).
@@ -147,7 +164,7 @@ class Interactome :
         number_of_vertices = len(self.get_int_dict().keys())
         return number_of_vertices
 
-    def count_edges(self) :
+    def count_edges(self) -> int :
         '''
         Return the number of edges.
 
@@ -157,37 +174,7 @@ class Interactome :
         number_of_edges = len(self.get_int_list())
         return number_of_edges
 
-    def clean_interactome(self, fileout) :
-        '''
-        Return an output file that is the same file as the input file but without
-        any duplicate interactions or homo-dimers.
-
-        Args :
-            fileout : the path of a file which will be written in output, .txt format
-
-        Output :
-            fileout : a tabulate file based on the filein file, cleaned from
-            all repetitions/homo-dimers
-        '''
-        # remove homo-dimers
-        for i in range(1, len(self.get_int_list())-1):
-            if self.get_int_list()[i][0] == self.get_int_list()[i][1]:
-                del self.get_int_list()[i]
-        # we remove duplicates from our list of lists
-        clean_text = list(l for l, _ in itertools.groupby(self.get_int_list()))
-        for i in clean_text:
-            for j in reversed(clean_text):
-                if i ==tuple(reversed(j)) :
-                    clean_text.remove(j)
-        # we modify the initial number of interactions by the newest value
-        clean_text.insert(0,str(len(clean_text)))
-        # we write into a new tabulated file the modifications
-        with open(fileout, "w+", encoding="utf-8") as file_writer:
-            file_writer.write(clean_text[0]+"\n")
-            for i in clean_text[1:]:
-                file_writer.write(str(i[0]) + "\t" + str(i[1])+"\n")
-
-    def get_degree(self, prot:str) :
+    def get_degree(self, prot:str) -> int :
         '''
         Return the protein degree.
 
@@ -201,25 +188,23 @@ class Interactome :
         protein_degree = len(self.get_int_dict()[prot])
         return protein_degree
 
-    def get_max_degree(self) :
+    def get_max_degree(self) -> tuple :
         '''
-        Return the maximum degree of the file.
-
+        Return the maximum degree (maximum number of interactions) of a given graph, and the protein associated to.
         Output :
-            proteins : a str (name of the protein(s) that have the maximum degree)
-            max_degree : an int (maximum degree of the file)
+            proteins : a str (name of the protein(s) that have the maximum degree) ;
+            max_degree : an int (maximum degree of the file).
         '''
         max_degree = max(len(item) for item in self.get_int_dict().values())
         protein = tuple(key for key, values in self.get_int_dict().items()
                         if len(values) == max_degree)
         return protein, max_degree
 
-    def get_ave_degree(self) :
+    def get_ave_degree(self) -> float :
         '''
-        Return the mean degree of the file.
-
+        Return the mean degree of a given graph of interactions.
         Output :
-            mean_degree : an int (mean degree of the file)
+            mean_degree : an float (mean degree of the graph), with 4 digits.
         '''
         sum_degree = 0
         for prot in self.get_int_dict() :
@@ -228,32 +213,31 @@ class Interactome :
         mean_degree = round(sum_degree/count_prot, 4)
         return mean_degree
 
-    def count_degree(self, deg:int) :
+    def count_degree(self, deg:int) -> int :
         '''
         Return the number of proteins that have the same degree as the one in the argument.
-
         Args :
-            deg : the degree we want to explore
+            deg : the degree (int) we want to explore.
         Output :
-            same_degree_prot : an int (number of proteins that have the same degree)
+            same_degree_prot : an int (number of proteins that have the same degree).
         '''
         if deg < 0 :
-            raise ValueError("You must choose a positive degree")
+            raise ValueError("You must choose a positive int degree")
         same_degree_prot = 0
         for prot in self.get_int_dict() :
             if len(self.get_int_dict()[prot]) == deg :
                 same_degree_prot += 1
         return same_degree_prot
 
-    def histogram_degree(self, dmin:int, dmax:int) :
+    def histogram_degree(self, dmin:int, dmax:int) -> None :
         '''
-        Print for a given range [dmin, dmax] the number of proteins that have the degree d.
-
+        Print for a given range [dmin, dmax] the number of proteins that have the degree d by using a dictionnary to
+        save in memory the key (= degree) and the values (= number of interactions).
         Args :
-            dmin : the minimum degree of the range
-            dmax : the maximum degree of the range
+            dmin : the minimum degree of the range (int) ;
+            dmax : the maximum degree of the range (int).
         Output :
-            print histogram_degree() : print a "*" for every proteins that have the degree nb_deg
+            print histogram_degree() : print an asterix ("*") for every proteins that have the degree "nb_deg".
         '''
         count_prot = 0
         deg_int = {}
@@ -265,7 +249,7 @@ class Interactome :
         for nb_deg, nb_prot in deg_int.items():
             print(str(nb_deg), nb_prot*"*", sep=" ")
     
-    def density(self) :
+    def density(self) -> float :
         '''
         Return the density of the interactome.
         Output :
@@ -276,11 +260,12 @@ class Interactome :
         density = round(self.count_edges() / max_edges, 4)              # edges / max_edges
         return density
 
-    def clustering(self, prot:str) :
+    def clustering(self, prot:str) -> float :
         '''
-        Return the local clustering coefficient.
+        Return the local clustering coefficient, which is the number of interactions (degree) of all the neighbours of a 
+        given node divided by the maximum number of interactions (degree) it could have.
         Args :
-            prot : vertice we want to know the local clustering coefficient
+            prot : a given node which we want to know the associated local clustering coefficient
         Output :
             coeff_clustering : a float (number of edges of the protein neighbors / maximal number of edges that it
             could have)
@@ -288,7 +273,7 @@ class Interactome :
         # maximum degree of the neighbours of the protein prot
         max_degree_prot = self.get_degree(prot)*(self.get_degree(prot)-1)/2
         list_prot = [prot]
-        if max_degree_prot == 0:
+        if max_degree_prot == 0:  # 0 divided by anything equals to 0
             coeff_clustering = float(0)
         else:
             count = 0
@@ -297,101 +282,98 @@ class Interactome :
                     if j in self.get_int_dict()[prot] and j not in list_prot :
                         count+=1
                         list_prot.append(j)
-            if count >0:
+            if count > 0: # to delete the input protein from our calculation
                 count -= 1
             coeff_clustering = count/max_degree_prot
         return coeff_clustering
     
-    def graph_ER(self, p:float) :
+    def graph_ER(self, p:float) -> list:
         '''
         Generating Erdös-Rényi random graphs G(n, p) where n is the number of vertices, and p is the probability of
         a edge to be present.
         Args :
-            p : a probability of a edge to be present 
+            p : a probability (float) of a node is connected to another one (presence of an edge) 
         Output :
-            g : a random graph with n nodes and m vertices
-        
+            g : a random graph (list of tuples) with n nodes and m vertices
          '''
         n = self.count_edges()
-        #m = n*(n-1)/2
-        g = nx.Graph()
-        g.add_nodes_from(range(1, n + 1))
-        for i in g.nodes():
-            for j in g.nodes():
-                if (i < j):
+        nodes = [i for i in range(1, n+1)]
+        g = []
+        for i in nodes :
+            for j in nodes :
+                if i < j:
                     if np.random.binomial(1, p) == 1:
-                        g.add_edge(i, j)
+                        g.append((str(i), str(j)))
         return g
 
-    def graph_BA(self, m_max) :
+    def graph_BA(self, m_max) -> list :
         '''
         Generating Barabasi-Alfred random graph, with m_0 edges in initialization which will be increased to m_max edges at the end. The probability
         that a new edge (s) is connected with an pre-existing edge (i) is given by this formula :
                             p(a_si = 1) = k_i / Sum(k_j)
                         where k_i is the degree of the edge i
         Args :
-            n_max : number of 
+            n_max : maximum number of nodes to create in our graph
         Output :
-            
+            g : a random graph (list of tuples) with n nodes and m vertices
+
         '''
         m_init = self.count_vertices()
-        prots = self.read_interaction_file_mat()[0]
+        nodes = self.read_interaction_file_mat()[0]
         sum_degrees = 0
-        for prot in prots :
+        g = self.get_int_list() # pre-existing graph based on the list of interactions 
+        for prot in nodes :
             sum_degrees += self.get_degree(prot)
         if m_init < 2 or sum_degrees < 0 :
             raise ValueError
-        g = nx.Graph(self.get_int_list())
         m = m_init
-        nodes = list(range(m))
         while m < m_max :
             deg = 0
-            prots.append(m)
-            nodes.append(m)
-            g.add_node(nodes[-1])
-            self.int_dict[m] = []
-            for prot in prots :
-                p = self.get_degree(prot)/sum_degrees
+            nodes.append(m) # we add a new node
+            self.get_int_dict()[m] = []
+            connected = False
+            for prot in nodes : # for every node in our graph
+                p = self.get_degree(prot)/sum_degrees  # proability of interaction between a pre-existing node and a new one
                 if np.random.binomial(1, p) == 1:
-                    g.add_edge(prot, prots[-1])
-                    self.int_dict[m] = [prots[-1]]
+                    connected = True 
+                    g.append((prot, str(nodes[-1])))  # we add an edge between the new node and a pre-existing one
+                    self.get_int_dict()[m] = [nodes[-1]] 
                     deg += 1
-            sum_degrees += deg
-            m += 1
+                sum_degrees += deg
+            if connected == False : # if a node is not connected to any others nodes
+                g.append(tuple(str(m)))
+            m +=1
+        
         return g
     
-    def find_CC(self) :
+    def find_CC(self) -> list :
         '''
-        Return all connected nodes.
+        Return all connected nodes. We check if a specific node is connected to another one.
         Output :
             connected_nodes : a list (of all nodes that are connected)
         '''
-        g = nx.Graph(self.get_int_list())
-        n = nx.nodes(g)
-        connected_nodes = []
-        for node in n :
+        cc = []
+        for node in self.get_int_dict().keys() :
             node_added = False
-            for edges in g.edges(node) :
-                    for edge in edges :
-                        for i in range(len(connected_nodes)) :
-                            if edge in connected_nodes[i] :
-                                if node not in connected_nodes[i] :
-                                    connected_nodes[i].append(node)
-                                    node_added = True
+            for edge in self.get_int_dict()[node] :
+                for i in range(len(cc)) :
+                    if edge in cc[i] :
+                        if node not in cc[i] :
+                            cc[i].append(node)
+                            node_added = True
             if node_added == False :
-                connected_nodes.append([node])
-        return connected_nodes
+                cc.append([node])
+        return cc
     
-    def count_CC(self) :
+    def count_CC(self) -> int:
         '''
-        Return the count of connected components.
+        Return the count of connected components for a given graph.
         Output :
-            count_CC : an int (the integer that correpond to every connected components)
+            count_CC : an int which correpond to the number of connected components in our graph
         '''
-        # we define our graph with the list of interactions 
         count_CC = len(self.find_CC())
         return count_CC 
-     
+    
     def write_CC(self) :
         '''
         Return an output file that contains the different connected components.
@@ -401,11 +383,12 @@ class Interactome :
             - the lenght of it is the first element of the line
             - the list of all vertices that composes the connected component.
         '''
-        with open("connected_components.txt", "w+", encoding="utf-8") as file_writer:
+        file_CC = self.fileName+"_CC"+self.fileExtension
+        with open(file_CC, "w+", encoding="utf-8") as file_writer:
             for i in range(self.count_CC()):
-                file_writer.write(str(len(self.find_CC()[i])) + '\t' + ' '.join(self.find_CC()[i]) + '\n')    
-
-    def extract_CC(self, prot:str) :
+                file_writer.write(str(len(self.find_CC()[i])) + '\t' + ' '.join(self.find_CC()[i]) + '\n')
+    
+    def extract_CC(self, prot:str) -> list :
         '''
         Return all the vertices of the connected component for the protein given in input.
         Args :
@@ -416,10 +399,10 @@ class Interactome :
         for i in range(len(self.find_CC())) :
             if prot in self.find_CC()[i] :
                 return self.find_CC()[i]
-            
-    def compute_CC(self) :
+                
+    def compute_CC(self) -> list :
         '''
-        Return for every protein in the connected component, the number of connected components it is involved in.
+        Return for every protein in the connected component, the number of the connected component it is involved in.
         Output :
             lcc : a list (number of connected components for every vertices of the connected component)
         '''
@@ -428,9 +411,7 @@ class Interactome :
             for _ in range(len(self.find_CC()[i])) :
                 lcc.append(i+1)
         return lcc
-
-
-            
+   
             
 
             
