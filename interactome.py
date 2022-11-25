@@ -8,6 +8,13 @@ __authors__ = ("Enora CORLER", "Léa BEAULIEU")
 __contact__ = ("enora.corler@etudiant.univ-rennes1.fr", "lea.beaulieu@etudiant.univ-rennes1.fr")
 __date__ = "25/11/2022"
 
+'''
+Importation of necessary modules :
+    - numpy : used to create matrix 
+    - itertools : allows to implement a various number of iterators
+    - os : allows to manipulate files
+'''
+
 import itertools
 import numpy as np
 import os
@@ -166,7 +173,7 @@ class Interactome :
 
     def count_edges(self) -> int :
         '''
-        Return the number of edges.
+        Return the number of edges(the number of interactions of our file).
 
         Output :
             number_of_edges : an int (number of edges)
@@ -176,7 +183,7 @@ class Interactome :
 
     def get_degree(self, prot:str) -> int :
         '''
-        Return the protein degree.
+        Return the protein degree (all the interaction of a protein).
 
         Args :
             prot : the name of a protein existing in the file
