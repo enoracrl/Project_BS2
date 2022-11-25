@@ -17,6 +17,7 @@ Scripts :
 * **test.py** : python file containing tests for our functions of the first chapters 
 * **interactome.py** : python file containing the Interactome class with all our functions
 * **test_interactome.py** : python file containing tests for our Interactome class
+* **demo_with.py** : python file containing tests for our Interactome class
 
 Additional files are put in ./Examples :
 **Human_HighQuality.txt** : a test file containing interactions (more complex : 27276 interactions) ;
